@@ -1342,6 +1342,21 @@ button {
     flex-direction: column;
     text-align: center;
   }
+
+  /* Show hamburger */
+  .hamburger {
+    display: flex;
+  }
+
+  /* Hide desktop nav links */
+  .nav-links {
+    display: none;
+  }
+
+  /* Hide Hire Me button if needed */
+  .nav-cta {
+    display: none;
+  }
 }
 
 @media (max-width: 400px) {
