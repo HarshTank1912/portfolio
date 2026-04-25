@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Harsh Tank — Full Stack Developer | React Native, Node.js, MongoDB, Firebase | B.Tech Computer Engineering" />
+  <title>Harsh Tank — Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>" />
+
+  <style>
+    /* ════════════════════════════
+       HERO — Two-column layout
+    ════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 60px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 100px);
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Left panel — name + animated label */
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 8.5rem);
+      line-height: 0.9;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+
+    .name-static {
+      color: var(--text-primary);
+      display: block;
+    }
+
+    /* Multi-vibrant animated gradient surname */
+    .name-vibrant {
+      display: block;
+      background: linear-gradient(90deg,
+          #43e8b0 0%,
+          #a78bfa 20%,
+          #ff6b4a 40%,
+          #f5c842 60%,
+          #43e8b0 80%,
+          #61DAFB 100%);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s linear infinite;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 300% 50%;
+      }
+    }
+
+    /* Animated role label pills on the left */
+    .hero-role-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .role-pill {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      border: 1px solid;
+      letter-spacing: 0.06em;
+      animation: pillFadeIn 0.6s var(--ease-out) both;
+    }
+
+    .role-pill:nth-child(1) {
+      color: #43e8b0;
+      border-color: rgba(67, 232, 176, 0.3);
+      background: rgba(67, 232, 176, 0.07);
+      --delay: 0.3s;
+    }
+
+    .role-pill:nth-child(2) {
+      color: #a78bfa;
+      border-color: rgba(167, 139, 250, 0.3);
+      background: rgba(167, 139, 250, 0.07);
+      --delay: 0.45s;
+    }
+
+    .role-pill:nth-child(3) {
+      color: #ff6b4a;
+      border-color: rgba(255, 107, 74, 0.3);
+      background: rgba(255, 107, 74, 0.07);
+      --delay: 0.6s;
+    }
+
+    .role-pill:nth-child(4) {
+      color: #f5c842;
+      border-color: rgba(245, 200, 66, 0.3);
+      background: rgba(245, 200, 66, 0.07);
+      --delay: 0.75s;
+    }
+
+    @keyframes pillFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Bottom-left: stats */
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Right panel */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .hero-tagline strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .hero-tagline em {
+      font-style: normal;
+      font-family: var(--font-serif);
+      color: var(--mint);
+      font-size: 1.05em;
+    }
+
+    /* Inline highlights */
+    .hero-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .hero-highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .hero-highlight-item i {
+      color: var(--mint);
+      width: 14px;
+      font-size: 0.7rem;
+    }
+
+    /* CTA + availability */
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    /* Mobile: stack to single column */
+    @media (max-width: 768px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .hero-name {
+        font-size: clamp(3.5rem, 18vw, 6rem);
+      }
+
+      .hero-stats {
+        gap: 1.25rem;
+      }
+    }
+
+    /* ════════════════════════════
+       EDUCATION / INFO CARDS
+    ════════════════════════════ */
+    .about-info-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--mint);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .info-card:hover {
+      border-color: rgba(67, 232, 176, 0.35);
+      transform: translateX(4px);
+    }
+
+    .info-card:hover::before {
+      opacity: 1;
+    }
+
+    .info-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 0.5rem;
+      background: rgba(67, 232, 176, 0.1);
+      border: 1px solid rgba(67, 232, 176, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      color: var(--mint);
+      flex-shrink: 0;
+    }
+
+    .info-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .info-card-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.12rem;
+    }
+
+    .info-card-title {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .info-card-sub {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .info-card-badge {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      background: rgba(67, 232, 176, 0.12);
+      color: var(--mint);
+      border: 1px solid rgba(67, 232, 176, 0.25);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════
+       CERT ITEMS
+    ════════════════════════════ */
+    .cert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-top: 1rem;
+    }
+
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+    }
+
+    .cert-item i {
+      color: var(--mint);
+      font-size: 0.68rem;
+    }
+
+    /* ════════════════════════════
+       TECH STACK — CATEGORY CARDS
+    ════════════════════════════ */
+    .stack-categories {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .stack-category {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .stack-category:hover {
+      border-color: rgba(67, 232, 176, 0.25);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .stack-category::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--cat-color, var(--mint));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s var(--ease-out);
+    }
+
+    .stack-category:hover::before {
+      transform: scaleX(1);
+    }
+
+    .stack-cat-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .stack-cat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 0.625rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: rgba(67, 232, 176, 0.1);
+      border: 1px solid rgba(67, 232, 176, 0.2);
+      color: var(--cat-color, var(--mint));
+    }
+
+    .stack-cat-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+    }
+
+    .stack-cat-desc {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+
+    .stack-tech-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .tech-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 0.5rem;
+      background: var(--ink);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
+      cursor: default;
+    }
+
+    .tech-badge i,
+    .tech-badge .badge-icon {
+      font-size: 0.9rem;
+    }
+
+    .tech-badge:hover {
+      color: var(--text-primary);
+      border-color: var(--cat-color, var(--mint));
+      background: rgba(67, 232, 176, 0.05);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Custom cursor elements (hidden) -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ═══════ NAVIGATION ═══════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">HT<span class="logo-dot">◈</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+        <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
+        <li><a href="#stack" class="nav-link" data-section="stack">Skills</a></li>
+        <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta">Hire Me</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu drawer -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#projects" class="mobile-link">Projects</a></li>
+      <li><a href="#stack" class="mobile-link">Skills</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       HERO — Two Column Layout
+  ═══════════════════════════════════════════════ -->
+  <section id="home" class="hero">
+    <div class="hero-bg">
+      <canvas id="heroCanvas"></canvas>
+      <div class="hero-gradient"></div>
+    </div>
+    <div class="geo geo-1"></div>
+    <div class="geo geo-2"></div>
+    <div class="geo geo-3"></div>
+
+    <div class="hero-content">
+
+      <!-- ── LEFT: Name + Role pills + Stats ── -->
+      <div class="hero-left reveal-left" style="--delay:0.1s">
+
+        <!-- Status badge -->
+        <div class="status-badge" style="width:fit-content">
+          <span class="status-dot"></span>
+          Open to opportunities
+        </div>
+
+        <!-- Name with vibrant animated gradient on surname -->
+        <h1 class="hero-name">
+          <span class="name-static">Harsh</span>
+          <span class="name-vibrant">Tank.</span>
+        </h1>
+
+        <!-- Role pills — vibrant multi-color -->
+        <div class="hero-role-pills">
+          <span class="role-pill" style="animation-delay:0.3s">Full Stack Dev</span>
+          <span class="role-pill" style="animation-delay:0.45s">React Native</span>
+          <span class="role-pill" style="animation-delay:0.6s">Node.js</span>
+          <span class="role-pill" style="animation-delay:0.75s">ML &amp; Python</span>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num" data-target="5">0</span><span class="stat-plus">+</span>
+            <span class="stat-label">Projects</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num" style="font-size:1.8rem;">8.81</span>
+            <span class="stat-label">CGPA</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num" data-target="5">0</span><span class="stat-plus">+</span>
+            <span class="stat-label">Tech Domains</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Tagline + Highlights + CTAs ── -->
+      <div class="hero-right reveal-right" style="--delay:0.25s">
+
+        <p class="hero-tagline">
+          <strong>Building scalable and impactful solutions for real-world challenges.</strong> — from campus mobility
+          to logistics
+          intelligence.<br /><br />
+          I design and engineer <em>cross-platform applications</em> that combine clean architecture, data-driven logic,
+          and experiences that create <em>meaningful impact</em>.
+        </p>
+
+        <!--<div class="hero-highlights">
+          <div class="hero-highlight-item">
+            <i class="fa-solid fa-mobile-screen-button"></i>
+            <span>Campus Ride — Real-time ride-sharing with OTP &amp; coin rewards</span>
+          </div>
+          <div class="hero-highlight-item">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>SmartLogix — ML delivery predictor, 68% accuracy, 0.74 ROC-AUC</span>
+          </div>
+          <div class="hero-highlight-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>SecureCity — Role-based crime management system (PHP + MySQL)</span>
+          </div>
+        </div>
+      -->
+        <div class="hero-ctas">
+          <a href="#projects" class="btn btn-primary">
+            View Projects <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <a href="mailto:harshtank19@gmail.com" class="btn btn-ghost">
+            Contact Me <i class="fa-regular fa-envelope"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       ABOUT SECTION
+  ═══════════════════════════════════════════════ -->
+  <section id="about" class="section about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">About Me <span class="accent-dot">.</span></h2>
+      </div>
+
+      <div class="about-grid">
+
+        <!-- Left: Photo + cards -->
+        <div class="about-visual reveal-left">
+          <div class="about-card-wrap">
+            <!-- Info cards -->
+            <div class="about-info-cards">
+              <div class="info-card">
+                <div class="info-card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="info-card-body">
+                  <div class="info-card-label">Current Education</div>
+                  <div class="info-card-title">B.Tech — Computer Engineering</div>
+                  <div class="info-card-sub">MBIT, CVMU · 2024–2027
+                  </div>
+                </div>
+                <span class="info-card-badge">8.81 CGPA</span>
+              </div>
+              <div class="info-card">
+                <div class="info-card-icon"><i class="fa-solid fa-school"></i></div>
+                <div class="info-card-body">
+                  <div class="info-card-label">Diploma</div>
+                  <div class="info-card-title">Computer Engineering</div>
+                  <div class="info-card-sub">BMU, Gujarat · 2021–2024</div>
+                </div>
+                <span class="info-card-badge">8.67 CGPA</span>
+              </div>
+              <div class="info-card">
+                <div class="info-card-icon"><i class="fa-solid fa-map-pin"></i></div>
+                <div class="info-card-body">
+                  <div class="info-card-label">Location</div>
+                  <div class="info-card-title">Surat, Gujarat, India</div>
+                  <div class="info-card-sub">Open to remote &amp; hybrid roles</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Text -->
+        <div class="about-text reveal-right">
+          <p class="about-body">
+            Hello I'm <em style="color:var(--mint)">Harsh Tank </em> , A Pre-final year <em style="color:#a78bfa">B.Tech
+              Computer Engineering</em>
+            student at <em style="color:#ff6b4a">Madhuben & Bhanubhai Patel Institute of Technology, CVMU</em> with
+            hands-on experience in full stack development and a strong foundation in building modern web
+            and cross-platform mobile applications. Proficient in technologies such as React, Node.js, Express, MongoDB,
+            and React Native, with a focus on developing scalable, efficient, and user-centric solutions.
+          </p>
+
+          <p class="about-body">
+            Experienced in working on diverse projects including mobile applications, machine learning-based systems,
+            and secure web platforms, applying best practices in design, performance optimization, and clean
+            architecture. Passionate about problem-solving, continuous learning, and exploring new technologies to
+            create impactful digital products.
+          </p>
+
+          <!-- Certifications em style="color:#ff6b4a" color:#a78bfa  <em style="color:var(--mint)"-->
+
+          <div style="margin-top:1.25rem">
+            <span class="section-num" style="font-size:0.68rem;letter-spacing:0.12em">CERTIFICATIONS &amp;
+              TRAINING</span>
+            <div class="cert-list">
+              <div class="cert-item">
+                <i class="fa-solid fa-certificate"></i>
+                <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank">
+                  <span>Designing Stories
+                    in SAP Analytics Cloud — <em style="color:var(--mint)">Jan 2026</em></span></a>
+              </div>
+              <div class="cert-item">
+                <i class="fa-solid fa-brain"></i>
+                <span>Code Unnati AI/ML Training — Supervised learning, data preprocessing &amp; model evaluation</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-actions">
+            <a href="mailto:harshtank19@gmail.com" class="btn btn-primary btn-sm">
+              <i class="fa-solid fa-paper-plane"></i> Get in Touch
+            </a>
+            <a href="https://linkedin.com/in/harsh-tank" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+              <i class="fa-brands fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       PROJECTS
+  ═══════════════════════════════════════════════ -->
+  <section id="projects" class="section projects-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Projects<span class="accent-dot">.</span></h2>
+        <p class="section-subtitle">Real-world problems, engineered solutions</p>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- Campus Ride -->
+        <article class="project-card reveal-up" style="--card-color:#43e8b0">
+          <div class="card-top-bar"></div>
+          <div class="card-body">
+            <div class="project-meta">
+              <span class="project-number">001</span>
+              <div class="project-links">
+                <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" aria-label="GitHub"
+                  class="icon-link"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" rel="noopener" aria-label="Live Demo" class="icon-link live-link"><i
+                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
+              </div>
+            </div>
+            <h3 class="project-title">Campus Ride</h3>
+            <p class="project-desc">A campus ride-sharing platform with dynamic Driver/Rider roles, Firebase real-time
+              sync, OTP-secured ride starts, and a coin-based cost-sharing system — no real-money transactions required.
+            </p>
+            <div class="project-tags">
+              <span class="tag">React Native</span>
+              <span class="tag">Expo</span>
+              <span class="tag">Firebase</span>
+              <span class="tag">Firestore</span>
+              <span class="tag">Expo Router</span>
+            </div>
+          </div>
+          <div class="card-hover-glow"></div>
+        </article>
+
+        <!-- SmartLogix -->
+        <article class="project-card reveal-up" style="--card-color:#a78bfa;--delay:0.1s">
+          <div class="card-top-bar"></div>
+          <div class="card-body">
+            <div class="project-meta">
+              <span class="project-number">002</span>
+              <div class="project-links">
+                <a href="https://github.com/HarshTank1912/ShipSense-E-Commerce-Delivery-Prediction" target="_blank"
+                  rel="noopener" aria-label="GitHub" class="icon-link"><i class="fa-brands fa-github"></i></a>
+                <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank"
+                  rel="noopener" aria-label="Live Demo" class="icon-link live-link"><i
+                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
+              </div>
+            </div>
+            <h3 class="project-title">SmartLogix</h3>
+            <p class="project-desc">An ML-powered e-commerce delivery delay predictor using Random Forest (68% accuracy,
+              0.74 ROC-AUC) with an interactive Streamlit + Plotly dashboard for EDA and logistics insights.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Scikit-learn</span>
+              <span class="tag">Streamlit</span>
+              <span class="tag">Plotly</span>
+              <span class="tag">Random Forest</span>
+            </div>
+          </div>
+          <div class="card-hover-glow"></div>
+        </article>
+
+        <!-- SecureCity -->
+        <article class="project-card reveal-up" style="--card-color:#ff6b4a;--delay:0.2s">
+          <div class="card-top-bar"></div>
+          <div class="card-body">
+            <div class="project-meta">
+              <span class="project-number">003</span>
+              <div class="project-links">
+                <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" aria-label="GitHub"
+                  class="icon-link"><i class="fa-brands fa-github"></i></a>
+                <a href="#" target="_blank" rel="noopener" aria-label="Live Demo" class="icon-link live-link"><i
+                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
+              </div>
+            </div>
+            <h3 class="project-title">SecureCity</h3>
+            <p class="project-desc">A web-based crime management system with role-based access control for Admin, Police
+              &amp; Citizens. Secure login, full CRUD on crime &amp; complaint records, and a structured relational
+              database schema.</p>
+            <div class="project-tags">
+              <span class="tag">PHP</span>
+              <span class="tag">MySQL</span>
+              <span class="tag">RBAC</span>
+              <span class="tag">HTML5</span>
+              <span class="tag">CSS3</span>
+            </div>
+          </div>
+          <div class="card-hover-glow"></div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       TECH STACK — Grouped Category Cards
+  ═══════════════════════════════════════════════ -->
+  <section id="stack" class="section stack-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Skills & Tech Stack<span class="accent-dot">.</span></h2>
+        <p class="section-subtitle">Organized by what I build and how I build it</p>
+      </div>
+
+      <div class="stack-categories">
+
+        <!-- Full Stack -->
+        <div class="stack-category reveal-up" style="--cat-color:#43e8b0">
+          <div class="stack-cat-header">
+            <div class="stack-cat-icon" style="--cat-color:#43e8b0"><i class="fa-solid fa-layer-group"></i></div>
+            <div>
+              <div class="stack-cat-title">Full Stack</div>
+              <div class="stack-cat-desc">Web &amp; Mobile · Frontend to Backend</div>
+            </div>
+          </div>
+          <div class="stack-tech-grid" style="--cat-color:#43e8b0">
+            <span class="tech-badge"><i class="fa-brands fa-react" style="color:#61DAFB"></i> React Native</span>
+            <span class="tech-badge"><i class="fa-brands fa-js" style="color:#F7DF1E"></i> JavaScript</span>
+            <span class="tech-badge"><i class="fa-brands fa-node-js" style="color:#339933"></i> Node.js</span>
+            <span class="tech-badge"><span class="badge-icon"
+                style="color:#fff;font-family:monospace;font-weight:700">Ex</span> Express.js</span>
+            <span class="tech-badge"><i class="fa-brands fa-html5" style="color:#E34F26"></i> HTML5</span>
+            <span class="tech-badge"><i class="fa-brands fa-css3-alt" style="color:#1572B6"></i> CSS3</span>
+            <span class="tech-badge"><i class="fa-brands fa-php" style="color:#777BB4"></i> PHP</span>
+            <span class="tech-badge"><i class="fa-solid fa-database" style="color:#47A248"></i> MongoDB</span>
+            <span class="tech-badge"><i class="fa-solid fa-database" style="color:#4169E1"></i> MySQL</span>
+            <span class="tech-badge"><i class="fa-solid fa-fire" style="color:#FFCA28"></i> Firebase</span>
+          </div>
+        </div>
+
+        <!-- AI · ML -->
+        <div class="stack-category reveal-up" style="--cat-color:#a78bfa;--delay:0.1s">
+          <div class="stack-cat-header">
+            <div class="stack-cat-icon" style="--cat-color:#a78bfa"><i class="fa-solid fa-brain"></i></div>
+            <div>
+              <div class="stack-cat-title">AI &amp; ML</div>
+              <div class="stack-cat-desc">Data · Machine Learning · Analytics</div>
+            </div>
+          </div>
+          <div class="stack-tech-grid" style="--cat-color:#a78bfa">
+            <span class="tech-badge" style="--cat-color:#a78bfa"><i class="fa-brands fa-python"
+                style="color:#3776AB"></i> Python</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><span class="badge-icon"
+                style="color:#F7931E;font-weight:700">SK</span> Scikit-learn</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><span class="badge-icon"
+                style="color:#FF4B4B">St</span> Streamlit</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><span class="badge-icon"
+                style="color:#3F4F75">Pl</span> Plotly</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><span class="badge-icon"
+                style="color:#150458">pd</span> Pandas</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><span class="badge-icon"
+                style="color:#4D77CF">np</span> NumPy</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><i class="fa-solid fa-chart-bar"
+                style="color:#a78bfa"></i> Data Analysis</span>
+            <span class="tech-badge" style="--cat-color:#a78bfa"><i class="fa-solid fa-robot" style="color:#a78bfa"></i>
+              Random Forest</span>
+          </div>
+        </div>
+
+        <!-- Tools & Frameworks -->
+        <div class="stack-category reveal-up" style="--cat-color:#ff6b4a;--delay:0.2s">
+          <div class="stack-cat-header">
+            <div class="stack-cat-icon" style="--cat-color:#ff6b4a"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+            <div>
+              <div class="stack-cat-title">Tools &amp; Frameworks</div>
+              <div class="stack-cat-desc">Dev Workflow · Version Control · Platforms</div>
+            </div>
+          </div>
+          <div class="stack-tech-grid" style="--cat-color:#ff6b4a">
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><i class="fa-brands fa-git-alt"
+                style="color:#F05032"></i> Git</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><i class="fa-brands fa-github"></i> GitHub</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><span class="badge-icon"
+                style="color:#0078D4">VS</span> VS Code</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><span class="badge-icon"
+                style="color:#61DAFB">EG</span> Expo Go</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><i class="fa-solid fa-key" style="color:#ff6b4a"></i>
+              Auth Systems</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><i class="fa-solid fa-database"
+                style="color:#ff6b4a"></i> DBMS</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><i class="fa-solid fa-diagram-project"
+                style="color:#ff6b4a"></i> SDLC</span>
+            <span class="tech-badge" style="--cat-color:#ff6b4a"><i class="fa-solid fa-cubes" style="color:#ff6b4a"></i>
+              OOP</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       CONTACT
+  ═══════════════════════════════════════════════ -->
+  <section id="contact" class="section contact-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Let's Talk<span class="accent-dot">.</span></h2>
+        <p class="section-subtitle">Have a project, collaboration or opportunity? I'd love to hear from you.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info reveal-left">
+          <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" class="contact-card">
+            <div class="contact-card-icon"><i class="fa-brands fa-github"></i></div>
+            <div class="contact-card-text">
+              <strong>GitHub</strong>
+              <span>github.com/HarshTank1912</span>
+            </div>
+            <i class="fa-solid fa-arrow-right contact-arrow"></i>
+          </a>
+
+          <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank" rel="noopener"
+            class="contact-card">
+            <div class="contact-card-icon linkedin-icon"><i class="fa-brands fa-linkedin-in"></i></div>
+            <div class="contact-card-text">
+              <strong>LinkedIn</strong>
+              <span>linkedin.com/in/Harsh Tank</span>
+            </div>
+            <i class="fa-solid fa-arrow-right contact-arrow"></i>
+          </a>
+
+          <a href="mailto:harshtank19@gmail.com" class="contact-card">
+            <div class="contact-card-icon email-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div class="contact-card-text">
+              <strong>Email</strong>
+              <span>harshtank19@gmail.com</span>
+            </div>
+            <i class="fa-solid fa-arrow-right contact-arrow"></i>
+          </a>
+
+          <a href="https://maps.google.com/?q=Surat,Gujarat,India" target="_blank" rel="noopener" class="contact-card">
+            <div class="contact-card-icon"
+              style="background:rgba(67,232,176,0.1);border-color:rgba(67,232,176,0.25);color:var(--mint)">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <div class="contact-card-text">
+              <strong>Location</strong>
+              <span>Surat, Gujarat, India</span>
+            </div>
+            <i class="fa-solid fa-arrow-right contact-arrow"></i>
+          </a>
+        </div>
+
+        <div class="contact-form-wrap reveal-right">
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="your@email.com" required />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or opportunity…"
+                required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+              <span class="btn-text">Send Message</span>
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+            <p class="form-note">* Opens your email client with the message pre-filled</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-logo">HT<span>◈</span></span>
+      <p class="footer-copy">© <span id="footerYear"></span> Harsh Tank — Built with pure craft.</p>
+      <a href="#home" class="back-top" aria-label="Back to top">
+        <i class="fa-solid fa-chevron-up"></i>
+      </a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
