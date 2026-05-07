@@ -580,6 +580,9 @@
           <a href="#projects" class="btn btn-primary">
             View Projects <i class="fa-solid fa-arrow-right"></i>
           </a>
+          <a href="./resume.pdf" target="_blank" rel="noopener" class="btn btn-ghost">
+            <i class="fa-solid fa-download"></i> Download Resume
+          </a>
           <a href="mailto:harshtank19@gmail.com" class="btn btn-ghost">
             Contact Me <i class="fa-regular fa-envelope"></i>
           </a>
@@ -710,9 +713,10 @@
             <div class="project-meta">
               <span class="project-number">001</span>
               <div class="project-links">
-                <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" aria-label="GitHub"
-                  class="icon-link"><i class="fa-brands fa-github"></i></a>
-                <a href="#" target="_blank" rel="noopener" aria-label="Live Demo" class="icon-link live-link"><i
+                <a href="https://github.com/HarshTank1912/Campus-ride" target="_blank" rel="noopener"
+                  aria-label="GitHub" class="icon-link"><i class="fa-brands fa-github"></i></a>
+                <a href="https://github.com/HarshTank1912/Campus-ride" target="_blank" rel="noopener"
+                  aria-label="Live Demo" class="icon-link live-link"><i
                     class="fa-solid fa-arrow-up-right-from-square"></i></a>
               </div>
             </div>
@@ -979,6 +983,62 @@
       </a>
     </div>
   </footer>
+
+  <!-- ═══════════════════════════════════════════════
+       AI CHATBOT WIDGET
+  ═══════════════════════════════════════════════ -->
+
+  <!-- Floating bubble trigger -->
+  <button class="chat-bubble" id="chatBubble" aria-label="Open AI Assistant">
+    <span class="chat-bubble-pulse"></span>
+    <i class="fa-solid fa-comment-dots chat-bubble-icon" id="chatBubbleIcon"></i>
+  </button>
+
+  <!-- Chat panel -->
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Portfolio Assistant" aria-hidden="true">
+
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="chat-avatar">
+          <span>HT</span>
+          <span class="chat-avatar-dot"></span>
+        </div>
+        <div class="chat-header-info">
+          <strong>HT Assistant</strong>
+          <span>Ask me anything about Harsh</span>
+        </div>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close chat">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Messages container -->
+    <div class="chat-messages" id="chatMessages">
+      <!-- Welcome message injected by JS -->
+    </div>
+
+    <!-- Quick suggestion chips -->
+    <div class="chat-suggestions" id="chatSuggestions">
+      <button class="chat-chip" data-query="What projects has Harsh built?">🚀 Projects</button>
+      <button class="chat-chip" data-query="What are Harsh's skills?">⚡ Skills</button>
+      <button class="chat-chip" data-query="Tell me about Harsh's education">🎓 Education</button>
+      <button class="chat-chip" data-query="How can I contact Harsh?">📬 Contact</button>
+    </div>
+
+    <!-- Input bar -->
+    <div class="chat-input-bar">
+      <input type="text" id="chatInput" class="chat-input" placeholder="Ask me anything…" autocomplete="off"
+        maxlength="200" />
+      <button class="chat-send" id="chatSend" aria-label="Send message">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Backdrop (mobile) -->
+  <div class="chat-overlay" id="chatOverlay"></div>
 
   <script src="script.js"></script>
 </body>

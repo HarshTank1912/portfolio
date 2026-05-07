@@ -472,3 +472,366 @@
     document.head.appendChild(style);
   }
 })();
+
+/* ════════════════════════════════════════════════
+   13. AI CHATBOT — Rule-Based Portfolio Assistant
+════════════════════════════════════════════════ */
+(function initChatbot() {
+
+  /* ── Elements ── */
+  const bubble    = document.getElementById('chatBubble');
+  const panel     = document.getElementById('chatPanel');
+  const closeBtn  = document.getElementById('chatClose');
+  const overlay   = document.getElementById('chatOverlay');
+  const messagesEl = document.getElementById('chatMessages');
+  const inputEl   = document.getElementById('chatInput');
+  const sendBtn   = document.getElementById('chatSend');
+  const chips     = document.querySelectorAll('.chat-chip');
+  const bubbleIcon = document.getElementById('chatBubbleIcon');
+
+  if (!bubble || !panel) return;
+
+  let isOpen   = false;
+  let isBusy   = false;
+
+  /* ══════════════════════════════════════════════
+     KNOWLEDGE BASE — Everything about Harsh Tank
+  ══════════════════════════════════════════════ */
+  const KB = {
+
+    greet: {
+      keywords: ['hi','hello','hey','sup','hiya','greetings','howdy','what\'s up','whats up','good morning','good afternoon','good evening'],
+      response: () => `Hey there! 👋 I'm <strong>HT Assistant</strong>, your guide to everything about <em>Harsh Tank</em>.<br><br>
+        I can tell you about his <strong>projects</strong>, <strong>skills</strong>, <strong>education</strong>, how to <strong>hire him</strong>, and more.<br><br>
+        What would you like to know?`
+    },
+
+    about: {
+      keywords: ['who is','about harsh','tell me about','introduce','yourself','overview','background','who are you','who r u'],
+      response: () => `<strong>Harsh Tank</strong> is a passionate <em>Full Stack Developer</em> and pre-final year B.Tech student. 🚀<br><br>
+        He builds <strong>scalable web & mobile applications</strong> using React Native, Node.js, MongoDB, Firebase, and more.<br><br>
+        With a <em>CGPA of 8.81</em>, he combines strong academics with real-world project experience spanning mobile apps, machine learning systems, and secure web platforms.`
+    },
+
+    projects: {
+      keywords: ['project','projects','built','build','made','work','portfolio','campus ride','smartlogix','securecity','shipsense','ride sharing','delivery','crime'],
+      response: () => `Here are Harsh's featured projects:<br><br>
+        🚀 <strong>Campus Ride</strong> — A React Native + Expo + Firebase ride-sharing app for college campuses with OTP-secured ride starts, real-time sync, and a coin-based cost-sharing system.<br><br>
+        📦 <strong>SmartLogix</strong> — An ML-powered delivery delay predictor (Random Forest, 68% accuracy, 0.74 ROC-AUC) with an interactive Streamlit + Plotly dashboard. <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank">Live Demo ↗</a><br><br>
+        🛡️ <strong>SecureCity</strong> — Role-based crime management system (Admin / Police / Citizen) built with PHP, MySQL, and full CRUD operations with secure authentication.`
+    },
+
+    skills: {
+      keywords: ['skill','skills','tech','stack','technologies','know','can do','expertise','proficient','language','languages','what do you','framework','tools'],
+      response: () => `Harsh's tech stack spans multiple domains:<br><br>
+        <strong>Full Stack:</strong> React Native, Node.js, Express.js, PHP, JavaScript, HTML5, CSS3<br>
+        <strong>Databases:</strong> MongoDB, MySQL, Firebase / Firestore<br>
+        <strong>AI & ML:</strong> Python, Scikit-learn, Pandas, NumPy, Streamlit, Plotly<br>
+        <strong>Tools:</strong> Git, GitHub, VS Code, Expo Go, Auth Systems, DBMS, OOP, SDLC`
+    },
+
+    education: {
+      keywords: ['education','study','college','university','degree','btech','b.tech','diploma','cgpa','gpa','grade','academic','mbit','cvmu','bmu','gujarat'],
+      response: () => `📚 <strong>B.Tech — Computer Engineering</strong><br>
+        Madhuben & Bhanubhai Patel Institute of Technology (MBIT), CVMU<br>
+        <em>2024 – 2027 · CGPA: 8.81</em><br><br>
+        🎓 <strong>Diploma — Computer Engineering</strong><br>
+        BMU, Gujarat<br>
+        <em>2021 – 2024 · CGPA: 8.67</em><br><br>
+        Currently a <strong>pre-final year</strong> student with strong academics and hands-on project experience.`
+    },
+
+    certifications: {
+      keywords: ['cert','certificate','certification','course','training','sap','analytics','ai ml','unnati','credential'],
+      response: () => `🏆 Harsh's certifications:<br><br>
+        📜 <strong>Designing Stories in SAP Analytics Cloud</strong> — Jan 2026<br>
+        <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank">Verify Certificate ↗</a><br><br>
+        🤖 <strong>Code Unnati AI/ML Training</strong> — Supervised learning, data preprocessing & model evaluation`
+    },
+
+    contact: {
+      keywords: ['contact','reach','email','mail','message','talk','connect','touch','hire','available','get in touch','how to contact','how can i','reach out'],
+      response: () => `You can reach Harsh through multiple channels:<br><br>
+        📧 <strong>Email:</strong> <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a><br>
+        💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank">linkedin.com/in/harsh-tank ↗</a><br>
+        🐙 <strong>GitHub:</strong> <a href="https://github.com/HarshTank1912" target="_blank">github.com/HarshTank1912 ↗</a><br><br>
+        He's always happy to discuss <em>projects, collaborations, or opportunities</em>!`
+    },
+
+    github: {
+      keywords: ['github','git','repository','repo','code','source','open source'],
+      response: () => `🐙 Harsh's GitHub profile:<br><br>
+        <a href="https://github.com/HarshTank1912" target="_blank"><strong>github.com/HarshTank1912 ↗</strong></a><br><br>
+        You'll find his projects including <em>Campus Ride</em>, <em>SmartLogix (ShipSense)</em>, <em>SecureCity</em>, and more.`
+    },
+
+    linkedin: {
+      keywords: ['linkedin','linked in','professional','profile'],
+      response: () => `💼 Connect with Harsh on LinkedIn:<br><br>
+        <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank"><strong>linkedin.com/in/harsh-tank ↗</strong></a><br><br>
+        He's open to professional connections and networking!`
+    },
+
+    location: {
+      keywords: ['location','where','city','based','live','surat','gujarat','india','remote','hybrid'],
+      response: () => `📍 Harsh is based in <strong>Surat, Gujarat, India</strong>.<br><br>
+        He's open to <em>remote</em>, <em>hybrid</em>, and <em>on-site</em> opportunities. Distance is no barrier for the right project! 🌏`
+    },
+
+    availability: {
+      keywords: ['available','availability','hire','hiring','job','internship','opportunity','work','freelance','open to'],
+      response: () => `✅ Harsh is currently <em>open to opportunities</em>!<br><br>
+        He's looking for:<br>
+        • <strong>Internships</strong> (Full Stack / Mobile Dev / ML)<br>
+        • <strong>Freelance projects</strong><br>
+        • <strong>Collaborations</strong> on interesting ideas<br><br>
+        Drop him a message at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a> — he responds quickly! 🚀`
+    },
+
+    campusride: {
+      keywords: ['campus ride','campusride','ride sharing','firebase','expo','react native app','mobile app','otp','coin'],
+      response: () => `🚀 <strong>Campus Ride</strong> — Harsh's flagship mobile app:<br><br>
+        A peer-to-peer <em>ride-sharing platform</em> for college campuses built with <strong>React Native + Expo + Firebase</strong>.<br><br>
+        Key features:<br>
+        • Dynamic <strong>Driver / Rider roles</strong><br>
+        • <strong>OTP-secured</strong> ride starts<br>
+        • <strong>Real-time sync</strong> via Firestore<br>
+        • <strong>Coin-based</strong> cost-sharing (no real money needed)<br>
+        • Expo Router navigation`
+    },
+
+    smartlogix: {
+      keywords: ['smartlogix','smart logix','shipsense','ship sense','delivery prediction','ml project','machine learning','random forest','streamlit','ecommerce','e-commerce'],
+      response: () => `📦 <strong>SmartLogix (ShipSense)</strong>:<br><br>
+        An <em>ML-powered delivery delay predictor</em> for e-commerce logistics.<br><br>
+        • Algorithm: <strong>Random Forest</strong><br>
+        • Accuracy: <strong>68%</strong> · ROC-AUC: <strong>0.74</strong><br>
+        • Interactive <strong>Streamlit + Plotly</strong> dashboard<br>
+        • Features: EDA, feature importance, predictions<br><br>
+        <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank">Try the Live Demo ↗</a>`
+    },
+
+    securecity: {
+      keywords: ['securecity','secure city','crime','police','rbac','role based','php','mysql','web project'],
+      response: () => `🛡️ <strong>SecureCity</strong>:<br><br>
+        A web-based <em>crime management system</em> with Role-Based Access Control.<br><br>
+        • <strong>3 roles:</strong> Admin, Police Officer, Citizen<br>
+        • Secure login & session management<br>
+        • Full <strong>CRUD</strong> on crime & complaint records<br>
+        • Built with <strong>PHP + MySQL</strong> and structured relational DB schema`
+    },
+
+    thanks: {
+      keywords: ['thank','thanks','thank you','thx','ty','appreciate','great','awesome','nice','cool','perfect','helpful'],
+      response: () => `You're welcome! 😊 Feel free to ask me anything else about Harsh.<br><br>
+        Or reach out to him directly at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a> — he'd love to connect! 🚀`
+    },
+
+    bye: {
+      keywords: ['bye','goodbye','see you','cya','later','take care','good night','good bye'],
+      response: () => `Goodbye! 👋 It was great chatting with you.<br><br>
+        If you'd like to collaborate with Harsh, don't hesitate to reach out. Have a great day! 🌟`
+    },
+
+    fallback: {
+      response: () => `Hmm, I'm not sure about that one! 🤔<br><br>
+        I can help you with:<br>
+        • Harsh's <strong>projects</strong> & work<br>
+        • His <strong>skills</strong> & tech stack<br>
+        • <strong>Education</strong> & certifications<br>
+        • How to <strong>contact</strong> or hire him<br><br>
+        Try asking one of the above, or click a suggestion chip below! 👇`
+    }
+  };
+
+  /* ══════════════════════════════════════════════
+     INTENT MATCHING — Keyword scoring
+  ══════════════════════════════════════════════ */
+  function matchIntent(text) {
+    const lower = text.toLowerCase().trim();
+
+    let bestIntent = null;
+    let bestScore  = 0;
+
+    for (const [intent, data] of Object.entries(KB)) {
+      if (intent === 'fallback') continue;
+      if (!data.keywords) continue;
+
+      let score = 0;
+      for (const kw of data.keywords) {
+        if (lower.includes(kw)) {
+          // Longer matches score higher
+          score += kw.length;
+        }
+      }
+
+      if (score > bestScore) {
+        bestScore  = score;
+        bestIntent = intent;
+      }
+    }
+
+    return bestScore > 0 ? bestIntent : 'fallback';
+  }
+
+  /* ══════════════════════════════════════════════
+     UI HELPERS
+  ══════════════════════════════════════════════ */
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function appendUserMessage(text) {
+    const row = document.createElement('div');
+    row.className = 'chat-msg user-msg';
+    row.innerHTML = `<div class="chat-bubble-msg">${escapeHtml(text)}</div>`;
+    messagesEl.appendChild(row);
+    scrollToBottom();
+  }
+
+  function appendBotMessage(html) {
+    const row = document.createElement('div');
+    row.className = 'chat-msg bot-msg';
+    const avatar = `<div class="bot-msg-avatar">HT</div>`;
+    const bubble = `<div class="chat-bubble-msg"></div>`;
+    row.innerHTML = avatar + bubble;
+    messagesEl.appendChild(row);
+    scrollToBottom();
+    return row.querySelector('.chat-bubble-msg');
+  }
+
+  function showTyping() {
+    const row = document.createElement('div');
+    row.className = 'chat-msg bot-msg chat-typing';
+    row.id = 'typingIndicator';
+    row.innerHTML = `
+      <div class="bot-msg-avatar">HT</div>
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>`;
+    messagesEl.appendChild(row);
+    scrollToBottom();
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+  }
+
+  function typewrite(el, html, speed = 12) {
+    // Strip HTML tags for typewriter, then restore HTML at end
+    // For simplicity: render as HTML directly (instant) with a fade-in
+    el.style.opacity = '0';
+    el.innerHTML = html;
+    el.style.transition = 'opacity 0.35s ease';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { el.style.opacity = '1'; });
+    });
+  }
+
+  function escapeHtml(text) {
+    const d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
+  }
+
+  /* ══════════════════════════════════════════════
+     SEND MESSAGE FLOW
+  ══════════════════════════════════════════════ */
+  function handleSend(userText) {
+    userText = userText.trim();
+    if (!userText || isBusy) return;
+
+    isBusy = true;
+    sendBtn.disabled = true;
+    inputEl.value = '';
+
+    appendUserMessage(userText);
+
+    // Simulate typing delay (300–700ms)
+    const delay = 300 + Math.random() * 400;
+    showTyping();
+
+    setTimeout(() => {
+      removeTyping();
+
+      const intent   = matchIntent(userText);
+      const response = KB[intent].response();
+      const bubbleEl = appendBotMessage('');
+      typewrite(bubbleEl, response);
+      scrollToBottom();
+
+      isBusy = false;
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }, delay);
+  }
+
+  /* ══════════════════════════════════════════════
+     OPEN / CLOSE
+  ══════════════════════════════════════════════ */
+  let welcomed = false;
+
+  function openChat() {
+    isOpen = true;
+    panel.classList.add('chat-open');
+    panel.setAttribute('aria-hidden', 'false');
+    overlay.classList.add('chat-open');
+    bubbleIcon.className = 'fa-solid fa-xmark chat-bubble-icon';
+    bubble.setAttribute('aria-label', 'Close AI Assistant');
+
+    if (!welcomed) {
+      welcomed = true;
+      setTimeout(() => {
+        const el = appendBotMessage('');
+        typewrite(el, `Hi there! 👋 I'm <strong>HT Assistant</strong>, Harsh's portfolio guide.<br><br>
+          Ask me about his <em>projects</em>, <em>skills</em>, <em>education</em>, how to <em>hire him</em>, and more!`);
+        scrollToBottom();
+      }, 200);
+    }
+
+    setTimeout(() => inputEl.focus(), 350);
+  }
+
+  function closeChat() {
+    isOpen = false;
+    panel.classList.remove('chat-open');
+    panel.setAttribute('aria-hidden', 'true');
+    overlay.classList.remove('chat-open');
+    bubbleIcon.className = 'fa-solid fa-comment-dots chat-bubble-icon';
+    bubble.setAttribute('aria-label', 'Open AI Assistant');
+  }
+
+  /* ══════════════════════════════════════════════
+     EVENT LISTENERS
+  ══════════════════════════════════════════════ */
+  bubble.addEventListener('click', () => isOpen ? closeChat() : openChat());
+  closeBtn.addEventListener('click', closeChat);
+  overlay.addEventListener('click', closeChat);
+
+  sendBtn.addEventListener('click', () => handleSend(inputEl.value));
+
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend(inputEl.value);
+    }
+  });
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const query = chip.getAttribute('data-query');
+      if (query) {
+        if (!isOpen) openChat();
+        setTimeout(() => handleSend(query), isOpen ? 0 : 400);
+      }
+    });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) closeChat();
+  });
+
+})();
+
