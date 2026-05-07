@@ -800,8 +800,8 @@
       welcomed = true;
       setTimeout(() => {
         const el = appendBotMessage('');
-        typewrite(el, `Hi there! 👋 I'm <strong>HT Assistant</strong>, Harsh's portfolio guide.<br><br>
-          Ask me about his <em>projects</em>, <em>skills</em>, <em>education</em>, how to <em>hire him</em>, and more!`);
+        typewrite(el, `Hey! 👋 Welcome to Harsh's portfolio.<br><br>
+          I'm his AI assistant. Want to know about his <strong>projects</strong>, <strong>skills</strong>, or <strong>how to contact him</strong>? Just ask or click a chip below!`);
         scrollToBottom();
       }, 200);
     }
