@@ -24,10 +24,10 @@
    2. NAVBAR
 ════════════════════════════════════════════════ */
 (function initNavbar() {
-  const navbar    = document.getElementById('navbar');
+  const navbar = document.getElementById('navbar');
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
-  const navLinks  = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll('.nav-link');
   const mobileLinks = document.querySelectorAll('.mobile-link');
 
   if (!navbar) return;
@@ -98,17 +98,17 @@
   let mouseX = -9999, mouseY = -9999;
 
   const CONFIG = {
-    count:        80,
-    maxDist:      140,
-    speed:        0.4,
+    count: 80,
+    maxDist: 140,
+    speed: 0.4,
     particleColor: 'rgba(67, 232, 176, ',   // mint, alpha varies
-    lineColor:     'rgba(67, 232, 176, ',
-    mouseRadius:  150,
+    lineColor: 'rgba(67, 232, 176, ',
+    mouseRadius: 150,
   };
 
   /* --- Resize canvas to fill hero section --- */
   function resize() {
-    W = canvas.width  = canvas.offsetWidth;
+    W = canvas.width = canvas.offsetWidth;
     H = canvas.height = canvas.offsetHeight;
   }
   window.addEventListener('resize', () => {
@@ -121,11 +121,11 @@
     const angle = Math.random() * Math.PI * 2;
     const speed = (Math.random() * 0.5 + 0.1) * CONFIG.speed;
     return {
-      x:   Math.random() * W,
-      y:   Math.random() * H,
-      vx:  Math.cos(angle) * speed,
-      vy:  Math.sin(angle) * speed,
-      r:   Math.random() * 1.5 + 0.5,
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      r: Math.random() * 1.5 + 0.5,
       alpha: Math.random() * 0.4 + 0.1,
     };
   }
@@ -155,10 +155,10 @@
       }
 
       // Wrap edges
-      if (p.x < 0)  p.x = W;
-      if (p.x > W)  p.x = 0;
-      if (p.y < 0)  p.y = H;
-      if (p.y > H)  p.y = 0;
+      if (p.x < 0) p.x = W;
+      if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H;
+      if (p.y > H) p.y = 0;
 
       // Draw dot
       ctx.beginPath();
@@ -251,15 +251,15 @@
   if (!counters.length) return;
 
   function animateCounter(el) {
-    const target  = parseInt(el.getAttribute('data-target'), 10);
+    const target = parseInt(el.getAttribute('data-target'), 10);
     const duration = 1800; // ms
-    const start    = performance.now();
+    const start = performance.now();
 
     function step(now) {
-      const elapsed  = now - start;
+      const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
       // Ease out cubic
-      const eased    = 1 - Math.pow(1 - progress, 3);
+      const eased = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.round(eased * target);
 
       if (progress < 1) {
@@ -297,8 +297,8 @@
   cards.forEach((card) => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width)  * 100;
-      const y = ((e.clientY - rect.top)  / rect.height) * 100;
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
       card.style.setProperty('--mx', x + '%');
       card.style.setProperty('--my', y + '%');
     });
@@ -309,7 +309,7 @@
    7. CONTACT FORM (mailto fallback — no backend)
 ════════════════════════════════════════════════ */
 (function initContactForm() {
-  const form      = document.getElementById('contactForm');
+  const form = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
   if (!form) return;
 
@@ -331,28 +331,28 @@
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const nameEl    = form.querySelector('#name');
-    const emailEl   = form.querySelector('#email');
+    const nameEl = form.querySelector('#name');
+    const emailEl = form.querySelector('#email');
     const messageEl = form.querySelector('#message');
 
     const isValid = validate([
-      { el: nameEl,    check: (v) => v.length >= 2,            msg: 'Name too short' },
-      { el: emailEl,   check: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), msg: 'Invalid email' },
-      { el: messageEl, check: (v) => v.length >= 10,           msg: 'Message too short' },
+      { el: nameEl, check: (v) => v.length >= 2, msg: 'Name too short' },
+      { el: emailEl, check: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), msg: 'Invalid email' },
+      { el: messageEl, check: (v) => v.length >= 10, msg: 'Message too short' },
     ]);
 
     if (!isValid) return;
 
     // Build mailto URL
     const subject = encodeURIComponent(`Portfolio Contact from ${nameEl.value.trim()}`);
-    const body    = encodeURIComponent(
+    const body = encodeURIComponent(
       `Hi Jordan,\n\n${messageEl.value.trim()}\n\n— ${nameEl.value.trim()} (${emailEl.value.trim()})`
     );
-    const mailto  = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+    const mailto = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 
     // Provide feedback before opening mail client
     const btnText = submitBtn.querySelector('.btn-text');
-    const icon    = submitBtn.querySelector('i');
+    const icon = submitBtn.querySelector('i');
     btnText.textContent = 'Opening Mail Client…';
     icon.className = 'fa-solid fa-check';
     submitBtn.style.background = '#43e8b0';
@@ -423,10 +423,10 @@
   items.forEach((item) => {
     item.addEventListener('mousemove', (e) => {
       const rect = item.getBoundingClientRect();
-      const cx   = rect.left + rect.width  / 2;
-      const cy   = rect.top  + rect.height / 2;
-      const dx   = (e.clientX - cx) / (rect.width  / 2);
-      const dy   = (e.clientY - cy) / (rect.height / 2);
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
       item.style.transform = `translateY(-6px) scale(1.03) translate(${dx * 4}px, ${dy * 4}px)`;
     });
     item.addEventListener('mouseleave', () => {
@@ -443,13 +443,13 @@
   cards.forEach((card) => {
     card.addEventListener('click', function (e) {
       const ripple = document.createElement('span');
-      const rect   = card.getBoundingClientRect();
-      const size   = Math.max(rect.width, rect.height);
+      const rect = card.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
       ripple.style.cssText = `
         position:absolute; border-radius:50%; pointer-events:none;
         width:${size}px; height:${size}px;
         left:${e.clientX - rect.left - size / 2}px;
-        top:${e.clientY - rect.top  - size / 2}px;
+        top:${e.clientY - rect.top - size / 2}px;
         background:rgba(245,166,35,0.12);
         transform:scale(0); animation:rippleAnim 0.5s ease forwards;
       `;
@@ -479,20 +479,20 @@
 (function initChatbot() {
 
   /* ── Elements ── */
-  const bubble    = document.getElementById('chatBubble');
-  const panel     = document.getElementById('chatPanel');
-  const closeBtn  = document.getElementById('chatClose');
-  const overlay   = document.getElementById('chatOverlay');
+  const bubble = document.getElementById('chatBubble');
+  const panel = document.getElementById('chatPanel');
+  const closeBtn = document.getElementById('chatClose');
+  const overlay = document.getElementById('chatOverlay');
   const messagesEl = document.getElementById('chatMessages');
-  const inputEl   = document.getElementById('chatInput');
-  const sendBtn   = document.getElementById('chatSend');
-  const chips     = document.querySelectorAll('.chat-chip');
+  const inputEl = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSend');
+  const chips = document.querySelectorAll('.chat-chip');
   const bubbleIcon = document.getElementById('chatBubbleIcon');
 
   if (!bubble || !panel) return;
 
-  let isOpen   = false;
-  let isBusy   = false;
+  let isOpen = false;
+  let isBusy = false;
 
   /* ══════════════════════════════════════════════
      KNOWLEDGE BASE — Everything about Harsh Tank
@@ -500,14 +500,14 @@
   const KB = {
 
     greet: {
-      keywords: ['hi','hello','hey','sup','hiya','greetings','howdy','what\'s up','whats up','good morning','good afternoon','good evening'],
+      keywords: ['hi', 'hello', 'hey', 'sup', 'hiya', 'greetings', 'howdy', 'what\'s up', 'whats up', 'good morning', 'good afternoon', 'good evening'],
       response: () => `Hey there! 👋 I'm <strong>HT Assistant</strong>, your guide to everything about <em>Harsh Tank</em>.<br><br>
         I can tell you about his <strong>projects</strong>, <strong>skills</strong>, <strong>education</strong>, how to <strong>hire him</strong>, and more.<br><br>
         Type <em>help</em> to see everything I can answer!`
     },
 
     help: {
-      keywords: ['help','commands','topics','what can you','what do you know','what can i ask','menu','options','list','show me'],
+      keywords: ['help', 'commands', 'topics', 'what can you', 'what do you know', 'what can i ask', 'menu', 'options', 'list', 'show me'],
       response: () => `Here's everything I can help you with:<br><br>
         👋 <strong>About Harsh</strong> — <em>"who is harsh"</em>, <em>"tell me about yourself"</em><br>
         🚀 <strong>Projects</strong> — <em>"what projects"</em>, <em>"campus ride"</em>, <em>"smartlogix"</em>, <em>"securecity"</em><br>
@@ -523,14 +523,14 @@
     },
 
     about: {
-      keywords: ['who is','about harsh','tell me about','introduce','yourself','overview','background','who are you','who r u'],
+      keywords: ['who is', 'about harsh', 'tell me about', 'introduce', 'yourself', 'overview', 'background', 'who are you', 'who r u'],
       response: () => `<strong>Harsh Tank</strong> is a passionate <em>Full Stack Developer</em> and pre-final year B.Tech student. 🚀<br><br>
         He builds <strong>scalable web & mobile applications</strong> using React Native, Node.js, MongoDB, Firebase, and more.<br><br>
         With a <em>CGPA of 8.81</em>, he combines strong academics with real-world project experience spanning mobile apps, machine learning systems, and secure web platforms.`
     },
 
     projects: {
-      keywords: ['project','projects','built','build','made','work','portfolio','campus ride','smartlogix','securecity','shipsense','ride sharing','delivery','crime'],
+      keywords: ['project', 'projects', 'built', 'build', 'made', 'work', 'portfolio', 'campus ride', 'smartlogix', 'securecity', 'shipsense', 'ride sharing', 'delivery', 'crime'],
       response: () => `Here are Harsh's featured projects:<br><br>
         🚀 <strong>Campus Ride</strong> — A React Native + Expo + Firebase ride-sharing app for college campuses with OTP-secured ride starts, real-time sync, and a coin-based cost-sharing system.<br><br>
         📦 <strong>SmartLogix</strong> — An ML-powered delivery delay predictor (Random Forest, 68% accuracy, 0.74 ROC-AUC) with an interactive Streamlit + Plotly dashboard. <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank">Live Demo ↗</a><br><br>
@@ -538,7 +538,7 @@
     },
 
     skills: {
-      keywords: ['skill','skills','tech','stack','technologies','know','can do','expertise','proficient','language','languages','what do you','framework','tools'],
+      keywords: ['skill', 'skills', 'tech', 'stack', 'technologies', 'know', 'can do', 'expertise', 'proficient', 'language', 'languages', 'what do you', 'framework', 'tools'],
       response: () => `Harsh's tech stack spans multiple domains:<br><br>
         <strong>Full Stack:</strong> React Native, Node.js, Express.js, PHP, JavaScript, HTML5, CSS3<br>
         <strong>Databases:</strong> MongoDB, MySQL, Firebase / Firestore<br>
@@ -547,7 +547,7 @@
     },
 
     education: {
-      keywords: ['education','study','college','university','degree','btech','b.tech','diploma','cgpa','gpa','grade','academic','mbit','cvmu','bmu','gujarat'],
+      keywords: ['education', 'study', 'college', 'university', 'degree', 'btech', 'b.tech', 'diploma', 'cgpa', 'gpa', 'grade', 'academic', 'mbit', 'cvmu', 'bmu', 'gujarat'],
       response: () => `📚 <strong>B.Tech — Computer Engineering</strong><br>
         Madhuben & Bhanubhai Patel Institute of Technology (MBIT), CVMU<br>
         <em>2024 – 2027 · CGPA: 8.81</em><br><br>
@@ -558,7 +558,7 @@
     },
 
     certifications: {
-      keywords: ['cert','certificate','certification','course','training','sap','analytics','ai ml','unnati','credential'],
+      keywords: ['cert', 'certificate', 'certification', 'course', 'training', 'sap', 'analytics', 'ai ml', 'unnati', 'credential'],
       response: () => `🏆 Harsh's certifications:<br><br>
         📜 <strong>Designing Stories in SAP Analytics Cloud</strong> — Jan 2026<br>
         <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank">Verify Certificate ↗</a><br><br>
@@ -566,7 +566,7 @@
     },
 
     contact: {
-      keywords: ['contact','reach','email','mail','message','talk','connect','touch','hire','available','get in touch','how to contact','how can i','reach out'],
+      keywords: ['contact', 'reach', 'email', 'mail', 'message', 'talk', 'connect', 'touch', 'hire', 'available', 'get in touch', 'how to contact', 'how can i', 'reach out'],
       response: () => `You can reach Harsh through multiple channels:<br><br>
         📧 <strong>Email:</strong> <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a><br>
         💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank">linkedin.com/in/harsh-tank ↗</a><br>
@@ -575,27 +575,27 @@
     },
 
     github: {
-      keywords: ['github','git','repository','repo','code','source','open source'],
+      keywords: ['github', 'git', 'repository', 'repo', 'code', 'source', 'open source'],
       response: () => `🐙 Harsh's GitHub profile:<br><br>
         <a href="https://github.com/HarshTank1912" target="_blank"><strong>github.com/HarshTank1912 ↗</strong></a><br><br>
         You'll find his projects including <em>Campus Ride</em>, <em>SmartLogix (ShipSense)</em>, <em>SecureCity</em>, and more.`
     },
 
     linkedin: {
-      keywords: ['linkedin','linked in','professional','profile'],
+      keywords: ['linkedin', 'linked in', 'professional', 'profile'],
       response: () => `💼 Connect with Harsh on LinkedIn:<br><br>
         <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank"><strong>linkedin.com/in/harsh-tank ↗</strong></a><br><br>
         He's open to professional connections and networking!`
     },
 
     location: {
-      keywords: ['location','where','city','based','live','surat','gujarat','india','remote','hybrid'],
+      keywords: ['location', 'where', 'city', 'based', 'live', 'surat', 'gujarat', 'india', 'remote', 'hybrid'],
       response: () => `📍 Harsh is based in <strong>Surat, Gujarat, India</strong>.<br><br>
         He's open to <em>remote</em>, <em>hybrid</em>, and <em>on-site</em> opportunities. Distance is no barrier for the right project! 🌏`
     },
 
     availability: {
-      keywords: ['available','availability','hire','hiring','job','internship','opportunity','work','freelance','open to'],
+      keywords: ['available', 'availability', 'hire', 'hiring', 'job', 'internship', 'opportunity', 'work', 'freelance', 'open to'],
       response: () => `✅ Harsh is currently <em>open to opportunities</em>!<br><br>
         He's looking for:<br>
         • <strong>Internships</strong> (Full Stack / Mobile Dev / ML)<br>
@@ -605,7 +605,7 @@
     },
 
     campusride: {
-      keywords: ['campus ride','campusride','ride sharing','firebase','expo','react native app','mobile app','otp','coin'],
+      keywords: ['campus ride', 'campusride', 'ride sharing', 'firebase', 'expo', 'react native app', 'mobile app', 'otp', 'coin'],
       response: () => `🚀 <strong>Campus Ride</strong> — Harsh's flagship mobile app:<br><br>
         A peer-to-peer <em>ride-sharing platform</em> for college campuses built with <strong>React Native + Expo + Firebase</strong>.<br><br>
         Key features:<br>
@@ -617,7 +617,7 @@
     },
 
     smartlogix: {
-      keywords: ['smartlogix','smart logix','shipsense','ship sense','delivery prediction','ml project','machine learning','random forest','streamlit','ecommerce','e-commerce'],
+      keywords: ['smartlogix', 'smart logix', 'shipsense', 'ship sense', 'delivery prediction', 'ml project', 'machine learning', 'random forest', 'streamlit', 'ecommerce', 'e-commerce'],
       response: () => `📦 <strong>SmartLogix (ShipSense)</strong>:<br><br>
         An <em>ML-powered delivery delay predictor</em> for e-commerce logistics.<br><br>
         • Algorithm: <strong>Random Forest</strong><br>
@@ -628,7 +628,7 @@
     },
 
     securecity: {
-      keywords: ['securecity','secure city','crime','police','rbac','role based','php','mysql','web project'],
+      keywords: ['securecity', 'secure city', 'crime', 'police', 'rbac', 'role based', 'php', 'mysql', 'web project'],
       response: () => `🛡️ <strong>SecureCity</strong>:<br><br>
         A web-based <em>crime management system</em> with Role-Based Access Control.<br><br>
         • <strong>3 roles:</strong> Admin, Police Officer, Citizen<br>
@@ -638,13 +638,13 @@
     },
 
     thanks: {
-      keywords: ['thank','thanks','thank you','thx','ty','appreciate','great','awesome','nice','cool','perfect','helpful'],
+      keywords: ['thank', 'thanks', 'thank you', 'thx', 'ty', 'appreciate', 'great', 'awesome', 'nice', 'cool', 'perfect', 'helpful'],
       response: () => `You're welcome! 😊 Feel free to ask me anything else about Harsh.<br><br>
         Or reach out to him directly at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a> — he'd love to connect! 🚀`
     },
 
     bye: {
-      keywords: ['bye','goodbye','see you','cya','later','take care','good night','good bye'],
+      keywords: ['bye', 'goodbye', 'see you', 'cya', 'later', 'take care', 'good night', 'good bye'],
       response: () => `Goodbye! 👋 It was great chatting with you.<br><br>
         If you'd like to collaborate with Harsh, don't hesitate to reach out. Have a great day! 🌟`
     },
@@ -667,7 +667,7 @@
     const lower = text.toLowerCase().trim();
 
     let bestIntent = null;
-    let bestScore  = 0;
+    let bestScore = 0;
 
     for (const [intent, data] of Object.entries(KB)) {
       if (intent === 'fallback') continue;
@@ -682,7 +682,7 @@
       }
 
       if (score > bestScore) {
-        bestScore  = score;
+        bestScore = score;
         bestIntent = intent;
       }
     }
@@ -771,7 +771,7 @@
     setTimeout(() => {
       removeTyping();
 
-      const intent   = matchIntent(userText);
+      const intent = matchIntent(userText);
       const response = KB[intent].response();
       const bubbleEl = appendBotMessage('');
       typewrite(bubbleEl, response);
