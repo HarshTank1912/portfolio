@@ -1449,28 +1449,49 @@ button {
   max-height: min(540px, calc(100vh - 8rem));
   display: flex;
   flex-direction: column;
-  background: rgba(18, 18, 26, 0.92);
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  /*
+   * Chrome fix: NEVER put transform on a position:fixed element in the hidden
+   * state — it causes Chrome to break fixed positioning (element flows as static).
+   * We use opacity + visibility only. The slide animation lives on .chat-open.
+   */
+  /* Solid fallback background (no backdrop-filter dependency) */
+  background: rgb(15, 15, 22);
   border: 1px solid rgba(67, 232, 176, 0.2);
   border-radius: 1.25rem;
   box-shadow:
     0 24px 80px rgba(0,0,0,0.6),
     0 0 0 1px rgba(67, 232, 176, 0.07) inset,
     0 0 60px -20px rgba(67, 232, 176, 0.15);
-  /* Hidden state */
+  /* Hidden: NO transform here — Chrome position:fixed + transform bug */
   opacity: 0;
-  transform: translateY(20px) scale(0.96);
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.3s var(--ease-out), transform 0.35s var(--ease-spring);
+  transition: opacity 0.28s var(--ease-out), visibility 0.28s, transform 0.32s var(--ease-spring);
   transform-origin: bottom right;
   overflow: hidden;
 }
 
+/* Apply glassmorphism only when browser supports it properly */
+@supports (backdrop-filter: blur(1px)) {
+  .chat-panel {
+    background: rgba(15, 15, 22, 0.94);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  }
+}
+
+/* Open state: animate in with translateY — applied ONLY when open */
 .chat-panel.chat-open {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  visibility: visible;
   pointer-events: all;
+  /* Safe to use transform here since the element is already painted */
+  animation: chatSlideIn 0.32s var(--ease-spring) both;
+}
+
+@keyframes chatSlideIn {
+  from { transform: translateY(16px) scale(0.97); }
+  to   { transform: translateY(0)    scale(1); }
 }
 
 /* Top accent bar */

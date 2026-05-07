@@ -503,7 +503,23 @@
       keywords: ['hi','hello','hey','sup','hiya','greetings','howdy','what\'s up','whats up','good morning','good afternoon','good evening'],
       response: () => `Hey there! 👋 I'm <strong>HT Assistant</strong>, your guide to everything about <em>Harsh Tank</em>.<br><br>
         I can tell you about his <strong>projects</strong>, <strong>skills</strong>, <strong>education</strong>, how to <strong>hire him</strong>, and more.<br><br>
-        What would you like to know?`
+        Type <em>help</em> to see everything I can answer!`
+    },
+
+    help: {
+      keywords: ['help','commands','topics','what can you','what do you know','what can i ask','menu','options','list','show me'],
+      response: () => `Here's everything I can help you with:<br><br>
+        👋 <strong>About Harsh</strong> — <em>"who is harsh"</em>, <em>"tell me about yourself"</em><br>
+        🚀 <strong>Projects</strong> — <em>"what projects"</em>, <em>"campus ride"</em>, <em>"smartlogix"</em>, <em>"securecity"</em><br>
+        ⚡ <strong>Skills & Tech Stack</strong> — <em>"what skills"</em>, <em>"tech stack"</em>, <em>"what do you know"</em><br>
+        🎓 <strong>Education</strong> — <em>"education"</em>, <em>"college"</em>, <em>"cgpa"</em>, <em>"btech"</em><br>
+        🏆 <strong>Certifications</strong> — <em>"certifications"</em>, <em>"sap"</em>, <em>"ai ml training"</em><br>
+        📬 <strong>Contact</strong> — <em>"how to contact"</em>, <em>"email"</em>, <em>"reach out"</em><br>
+        🐙 <strong>GitHub</strong> — <em>"github"</em>, <em>"repo"</em>, <em>"code"</em><br>
+        💼 <strong>LinkedIn</strong> — <em>"linkedin"</em>, <em>"professional profile"</em><br>
+        📍 <strong>Location</strong> — <em>"where is he"</em>, <em>"surat"</em>, <em>"remote"</em><br>
+        ✅ <strong>Hiring / Availability</strong> — <em>"is he available"</em>, <em>"internship"</em>, <em>"freelance"</em><br><br>
+        Just type naturally — I'll figure it out! 😊`
     },
 
     about: {
