@@ -1,5 +1,5 @@
 /**
- * JORDAN VOSS PORTFOLIO — script.js
+ * Harsh Tank PORTFOLIO — script.js
  * ─────────────────────────────────
  * Features:
  *  1. Custom cursor
@@ -346,7 +346,7 @@
     // Build mailto URL
     const subject = encodeURIComponent(`Portfolio Contact from ${nameEl.value.trim()}`);
     const body = encodeURIComponent(
-      `Hi Jordan,\n\n${messageEl.value.trim()}\n\n— ${nameEl.value.trim()} (${emailEl.value.trim()})`
+      `Hi Harsh,\n\n${messageEl.value.trim()}\n\n— ${nameEl.value.trim()} (${emailEl.value.trim()})`
     );
     const mailto = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 
