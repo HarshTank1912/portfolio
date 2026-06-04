@@ -550,7 +550,7 @@
       keywords: ['education', 'study', 'college', 'university', 'degree', 'btech', 'b.tech', 'diploma', 'cgpa', 'gpa', 'grade', 'academic', 'mbit', 'cvmu', 'bmu', 'gujarat'],
       response: () => `📚 <strong>B.Tech — Computer Engineering</strong><br>
         Madhuben & Bhanubhai Patel Institute of Technology (MBIT), CVMU<br>
-        <em>2024 – 2027 · CGPA: 8.81</em><br><br>
+        <em>2024 – 2027 · CGPA: 8.92</em><br><br>
         🎓 <strong>Diploma — Computer Engineering</strong><br>
         BMU, Gujarat<br>
         <em>2021 – 2024 · CGPA: 8.67</em><br><br>
