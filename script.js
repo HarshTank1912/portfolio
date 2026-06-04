@@ -526,7 +526,7 @@
       keywords: ['who is', 'about harsh', 'tell me about', 'introduce', 'yourself', 'overview', 'background', 'who are you', 'who r u'],
       response: () => `<strong>Harsh Tank</strong> is a passionate <em>Full Stack Developer</em> and pre-final year B.Tech student. 🚀<br><br>
         He builds <strong>scalable web & mobile applications</strong> using React Native, Node.js, MongoDB, Firebase, and more.<br><br>
-        With a <em>CGPA of 8.81</em>, he combines strong academics with real-world project experience spanning mobile apps, machine learning systems, and secure web platforms.`
+        With a <em>CGPA of 8.92</em>, he combines strong academics with real-world project experience spanning mobile apps, machine learning systems, and secure web platforms.`
     },
 
     projects: {
