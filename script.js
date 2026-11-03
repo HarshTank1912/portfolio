@@ -101,8 +101,8 @@
     count: 80,
     maxDist: 140,
     speed: 0.4,
-    particleColor: 'rgba(67, 232, 176, ',   // mint, alpha varies
-    lineColor: 'rgba(67, 232, 176, ',
+    particleColor: 'rgba(25, 217, 255, ',   // mint, alpha varies
+    lineColor: 'rgba(25, 217, 255, ',
     mouseRadius: 150,
   };
 
@@ -488,6 +488,63 @@
   const sendBtn = document.getElementById('chatSend');
   const chips = document.querySelectorAll('.chat-chip');
   const bubbleIcon = document.getElementById('chatBubbleIcon');
+  const micBtn = document.getElementById('chatMic');
+  const speakBtn = document.getElementById('chatSpeak');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let voiceReplies = false;
+  let lastSpokenText = '';
+  let voiceRequestPending = false;
+
+  function showVoiceNotice(message) {
+    const notice = appendBotMessage('');
+    typewrite(notice, message);
+    scrollToBottom();
+  }
+
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognition.onstart = () => {
+      micBtn?.classList.add('is-listening');
+      micBtn?.setAttribute('aria-label', 'Listening — click to stop');
+      micBtn?.setAttribute('title', 'Listening… speak now');
+    };
+    recognition.onend = () => {
+      voiceRequestPending = false;
+      micBtn?.classList.remove('is-listening');
+      micBtn?.setAttribute('aria-label', 'Start voice input');
+      micBtn?.setAttribute('title', 'Ask Jarvis by voice');
+    };
+    recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      if (transcript.trim()) inputEl.value = transcript.trim();
+      const result = event.results[event.results.length - 1];
+      if (result?.isFinal && transcript.trim()) handleSend(transcript.trim());
+    };
+    recognition.onerror = (event) => {
+      voiceRequestPending = false;
+      micBtn?.classList.remove('is-listening');
+      const messages = {
+        'not-allowed': '🎙️ Microphone access is blocked. Allow microphone permission in your browser settings, then try again.',
+        'service-not-allowed': 'The browser speech service is unavailable. Try Chrome or Edge.',
+        'no-speech': 'I did not hear anything. Please try again and speak clearly.',
+        'network': 'Speech recognition could not connect. Check your internet connection and try again.',
+        'audio-capture': 'No microphone was detected. Check your microphone connection.',
+        'aborted': 'Voice input was stopped.'
+      };
+      showVoiceNotice(messages[event.error] || `Voice input error: ${event.error}. You can still type your question.`);
+    };
+  } else if (micBtn) {
+    micBtn.disabled = true;
+    micBtn.title = 'Speech recognition is not supported here. Try Chrome or Edge.';
+  }
 
   if (!bubble || !panel) return;
 
@@ -498,196 +555,178 @@
      KNOWLEDGE BASE — Everything about Harsh Tank
   ══════════════════════════════════════════════ */
   const KB = {
-
     greet: {
-      keywords: ['hi', 'hello', 'hey', 'sup', 'hiya', 'greetings', 'howdy', 'what\'s up', 'whats up', 'good morning', 'good afternoon', 'good evening'],
-      response: () => `Hey there! 👋 I'm <strong>HT Assistant</strong>, your guide to everything about <em>Harsh Tank</em>.<br><br>
-        I can tell you about his <strong>projects</strong>, <strong>skills</strong>, <strong>education</strong>, how to <strong>hire him</strong>, and more.<br><br>
-        Type <em>help</em> to see everything I can answer!`
+      keywords: ['hi','hello','hey','hiya','greetings','howdy','good morning','good afternoon','good evening','what is up','whats up'],
+      response: () => `Hey there! 👋 I'm <strong>Harsh's Jarvis</strong>, your guide to <strong>Harsh Tank</strong>'s portfolio.<br><br>Ask me about his profile, projects, skills, education, experience, certifications, or contact details.`
     },
-
     help: {
-      keywords: ['help', 'commands', 'topics', 'what can you', 'what do you know', 'what can i ask', 'menu', 'options', 'list', 'show me'],
-      response: () => `Here's everything I can help you with:<br><br>
-        👋 <strong>About Harsh</strong> — <em>"who is harsh"</em>, <em>"tell me about yourself"</em><br>
-        🚀 <strong>Projects</strong> — <em>"what projects"</em>, <em>"campus ride"</em>, <em>"smartlogix"</em>, <em>"securecity"</em><br>
-        ⚡ <strong>Skills & Tech Stack</strong> — <em>"what skills"</em>, <em>"tech stack"</em>, <em>"what do you know"</em><br>
-        🎓 <strong>Education</strong> — <em>"education"</em>, <em>"college"</em>, <em>"cgpa"</em>, <em>"btech"</em><br>
-        🏆 <strong>Certifications</strong> — <em>"certifications"</em>, <em>"sap"</em>, <em>"ai ml training"</em><br>
-        📬 <strong>Contact</strong> — <em>"how to contact"</em>, <em>"email"</em>, <em>"reach out"</em><br>
-        🐙 <strong>GitHub</strong> — <em>"github"</em>, <em>"repo"</em>, <em>"code"</em><br>
-        💼 <strong>LinkedIn</strong> — <em>"linkedin"</em>, <em>"professional profile"</em><br>
-        📍 <strong>Location</strong> — <em>"where is he"</em>, <em>"surat"</em>, <em>"remote"</em><br>
-        ✅ <strong>Hiring / Availability</strong> — <em>"is he available"</em>, <em>"internship"</em>, <em>"freelance"</em><br><br>
-        Just type naturally — I'll figure it out! 😊`
+      keywords: ['help','what can you do','what can i ask','what do you know','show topics','show categories','menu','commands','list topics','suggest questions'],
+      response: () => `I can answer questions about:<br><br>👋 <strong>About & Profile</strong> — who Harsh is, what he does, professional summary<br>🚀 <strong>Projects</strong> — Campus Ride, SmartLogix / ShipSense, eRaksha<br>⚡ <strong>Skills</strong> — languages, frontend, backend, databases, ML and blockchain<br>🎓 <strong>Education</strong> — B.Tech, diploma, college and CGPA<br>💼 <strong>Experience</strong> — internship and practical work<br>🏆 <strong>Certifications</strong> — SAP, Code Unnati and Innovation Marathon<br>📬 <strong>Contact</strong> — email, GitHub, LinkedIn and portfolio<br>🌍 <strong>Career & Availability</strong> — opportunities and collaboration<br><br>Ask naturally, for example: <em>“What does Harsh do?”</em> or <em>“Which projects has he built?”</em>`
     },
-
     about: {
-      keywords: ['who is', 'about harsh', 'tell me about', 'introduce', 'yourself', 'overview', 'background', 'who are you', 'who r u'],
-      response: () => `<strong>Harsh Tank</strong> is a passionate <em>Full Stack Developer</em> and pre-final year B.Tech student. 🚀<br><br>
-        He builds <strong>scalable web & mobile applications</strong> using React Native, Node.js, MongoDB, Firebase, and more.<br><br>
-        With a <em>CGPA of 8.92</em>, he combines strong academics with real-world project experience spanning mobile apps, machine learning systems, and secure web platforms.`
+      keywords: ['who is harsh','who is harsh tank','about harsh','tell me about harsh','what does harsh do','what do harsh do','what does harsh tank do','what is harsh','introduce harsh','introduction','describe harsh','his profession','his occupation','what does he do','what does he work as','kind of developer','what type of developer','professional background','career background','his journey','what is he passionate','what are his interests','what does he specialize','area of interest','professional overview','brief about','tell me about yourself','who are you'],
+      response: () => `<strong>Harsh Tank</strong> is a Full Stack Developer and B.Tech Computer Engineering student at MBIT, CVM University. 🚀<br><br>He builds web and mobile applications using technologies such as <strong>React, React Native, Node.js, Express.js, MongoDB, MySQL and Firebase</strong>.<br><br>His project experience also includes <strong>Python-based data analysis and machine learning</strong>, along with blockchain concepts using <strong>Solidity and Ethereum</strong>. He is interested in building practical, user-focused software and exploring data-driven solutions.`
     },
-
+    profile: {
+      keywords: ['profile','professional profile','show profile','his portfolio','portfolio website','personal website','resume','résumé','cv','curriculum vitae','professional summary','career objective','profile summary','his designation','current status','what is he currently doing','current role','professional identity','download resume','view resume','see resume','github profile','linkedin profile'],
+      response: () => `Harsh's professional focus is <strong>Full Stack Development</strong>, with additional project exposure to <strong>Data Analysis, Machine Learning and Blockchain</strong>.<br><br>🌐 <a href="https://harsh-tank-portfolio-five.vercel.app/" target="_blank" rel="noopener noreferrer">Portfolio Website ↗</a><br>🐙 <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener noreferrer">GitHub Profile ↗</a><br>💼 <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank" rel="noopener noreferrer">LinkedIn Profile ↗</a><br><br>For a resume or professional discussion, contact <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a>.`
+    },
     projects: {
-      keywords: ['project', 'projects', 'built', 'build', 'made', 'work', 'portfolio', 'campus ride', 'smartlogix', 'securecity', 'shipsense', 'ride sharing', 'delivery', 'crime'],
-      response: () => `Here are Harsh's featured projects:<br><br>
-        🚀 <strong>Campus Ride</strong> — A React Native + Expo + Firebase ride-sharing app for college campuses with OTP-secured ride starts, real-time sync, and a coin-based cost-sharing system.<br><br>
-        📦 <strong>SmartLogix</strong> — An ML-powered delivery delay predictor (Random Forest, 68% accuracy, 0.74 ROC-AUC) with an interactive Streamlit + Plotly dashboard. <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank">Live Demo ↗</a><br><br>
-        🛡️ <strong>SecureCity</strong> — Role-based crime management system (Admin / Police / Citizen) built with PHP, MySQL, and full CRUD operations with secure authentication.`
+      keywords: ['projects','project list','his work','what has he built','what has he developed','what projects','show projects','all projects','best project','major project','featured project','portfolio projects','web projects','mobile projects','machine learning projects','ml projects','blockchain project','real world projects','source code','project demo','project repository'],
+      response: () => `Harsh's featured projects include:<br><br>🚀 <strong>Campus Ride</strong> — A college ride-sharing mobile app built with React Native, Expo and Firebase. It includes Rider/Driver role switching, OTP ride verification, real-time Firestore sync and coin-based cost sharing.<br><br>📦 <strong>SmartLogix (ShipSense)</strong> — An e-commerce delivery prediction project using Python, Random Forest, Streamlit and Plotly. The reported model results are approximately <strong>68% accuracy</strong> and <strong>0.74 ROC-AUC</strong>. <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank" rel="noopener noreferrer">Live Demo ↗</a><br><br>🛡️ <strong>eRaksha</strong> — A blockchain-based e-FIR management system concept using PHP, MySQL, Solidity, Ethereum and Ganache, with hashing, timestamping, ledger anchoring and integrity verification.<br><br>More source code: <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener noreferrer">Harsh's GitHub ↗</a>`
     },
-
-    skills: {
-      keywords: ['skill', 'skills', 'tech', 'stack', 'technologies', 'know', 'can do', 'expertise', 'proficient', 'language', 'languages', 'what do you', 'framework', 'tools'],
-      response: () => `Harsh's tech stack spans multiple domains:<br><br>
-        <strong>Full Stack:</strong> React Native, Node.js, Express.js, PHP, JavaScript, HTML5, CSS3<br>
-        <strong>Databases:</strong> MongoDB, MySQL, Firebase / Firestore<br>
-        <strong>AI & ML:</strong> Python, Scikit-learn, Pandas, NumPy, Streamlit, Plotly<br>
-        <strong>Tools:</strong> Git, GitHub, VS Code, Expo Go, Auth Systems, DBMS, OOP, SDLC`
-    },
-
-    education: {
-      keywords: ['education', 'study', 'college', 'university', 'degree', 'btech', 'b.tech', 'diploma', 'cgpa', 'gpa', 'grade', 'academic', 'mbit', 'cvmu', 'bmu', 'gujarat'],
-      response: () => `📚 <strong>B.Tech — Computer Engineering</strong><br>
-        Madhuben & Bhanubhai Patel Institute of Technology (MBIT), CVMU<br>
-        <em>2024 – 2027 · CGPA: 8.92</em><br><br>
-        🎓 <strong>Diploma — Computer Engineering</strong><br>
-        BMU, Gujarat<br>
-        <em>2021 – 2024 · CGPA: 8.67</em><br><br>
-        Currently a <strong>pre-final year</strong> student with strong academics and hands-on project experience.`
-    },
-
-    certifications: {
-      keywords: ['cert', 'certificate', 'certification', 'course', 'training', 'sap', 'analytics', 'ai ml', 'unnati', 'credential'],
-      response: () => `🏆 Harsh's certifications:<br><br>
-        📜 <strong>Designing Stories in SAP Analytics Cloud</strong> — Jan 2026<br>
-        <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank">Verify Certificate ↗</a><br><br>
-        🤖 <strong>Code Unnati AI/ML Training</strong> — Supervised learning, data preprocessing & model evaluation`
-    },
-
-    contact: {
-      keywords: ['contact', 'reach', 'email', 'mail', 'message', 'talk', 'connect', 'touch', 'hire', 'available', 'get in touch', 'how to contact', 'how can i', 'reach out'],
-      response: () => `You can reach Harsh through multiple channels:<br><br>
-        📧 <strong>Email:</strong> <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a><br>
-        💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank">linkedin.com/in/harsh-tank ↗</a><br>
-        🐙 <strong>GitHub:</strong> <a href="https://github.com/HarshTank1912" target="_blank">github.com/HarshTank1912 ↗</a><br><br>
-        He's always happy to discuss <em>projects, collaborations, or opportunities</em>!`
-    },
-
-    github: {
-      keywords: ['github', 'git', 'repository', 'repo', 'code', 'source', 'open source'],
-      response: () => `🐙 Harsh's GitHub profile:<br><br>
-        <a href="https://github.com/HarshTank1912" target="_blank"><strong>github.com/HarshTank1912 ↗</strong></a><br><br>
-        You'll find his projects including <em>Campus Ride</em>, <em>SmartLogix (ShipSense)</em>, <em>SecureCity</em>, and more.`
-    },
-
-    linkedin: {
-      keywords: ['linkedin', 'linked in', 'professional', 'profile'],
-      response: () => `💼 Connect with Harsh on LinkedIn:<br><br>
-        <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank"><strong>linkedin.com/in/harsh-tank ↗</strong></a><br><br>
-        He's open to professional connections and networking!`
-    },
-
-    location: {
-      keywords: ['location', 'where', 'city', 'based', 'live', 'surat', 'gujarat', 'india', 'remote', 'hybrid'],
-      response: () => `📍 Harsh is based in <strong>Surat, Gujarat, India</strong>.<br><br>
-        He's open to <em>remote</em>, <em>hybrid</em>, and <em>on-site</em> opportunities. Distance is no barrier for the right project! 🌏`
-    },
-
-    availability: {
-      keywords: ['available', 'availability', 'hire', 'hiring', 'job', 'internship', 'opportunity', 'work', 'freelance', 'open to'],
-      response: () => `✅ Harsh is currently <em>open to opportunities</em>!<br><br>
-        He's looking for:<br>
-        • <strong>Internships</strong> (Full Stack / Mobile Dev / ML)<br>
-        • <strong>Freelance projects</strong><br>
-        • <strong>Collaborations</strong> on interesting ideas<br><br>
-        Drop him a message at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a> — he responds quickly! 🚀`
-    },
-
     campusride: {
-      keywords: ['campus ride', 'campusride', 'ride sharing', 'firebase', 'expo', 'react native app', 'mobile app', 'otp', 'coin'],
-      response: () => `🚀 <strong>Campus Ride</strong> — Harsh's flagship mobile app:<br><br>
-        A peer-to-peer <em>ride-sharing platform</em> for college campuses built with <strong>React Native + Expo + Firebase</strong>.<br><br>
-        Key features:<br>
-        • Dynamic <strong>Driver / Rider roles</strong><br>
-        • <strong>OTP-secured</strong> ride starts<br>
-        • <strong>Real-time sync</strong> via Firestore<br>
-        • <strong>Coin-based</strong> cost-sharing (no real money needed)<br>
-        • Expo Router navigation`
+      keywords: ['campus ride','campusride','rideup','ride up','ride sharing','ridesharing','college ride','campus transport','rider driver','driver rider','ride otp','ride verification','coin rewards','firestore','firebase ride','expo router'],
+      response: () => `🚀 <strong>Campus Ride</strong> is a peer-to-peer ride-sharing mobile application concept for college campuses, built using <strong>React Native, Expo and Firebase</strong>.<br><br>Key features include:<br>• Dynamic <strong>Rider / Driver</strong> role switching<br>• OTP-based ride verification<br>• Real-time data synchronization using Firestore<br>• Coin-based cost-sharing and rewards<br>• Mobile navigation using Expo Router`
     },
-
     smartlogix: {
-      keywords: ['smartlogix', 'smart logix', 'shipsense', 'ship sense', 'delivery prediction', 'ml project', 'machine learning', 'random forest', 'streamlit', 'ecommerce', 'e-commerce'],
-      response: () => `📦 <strong>SmartLogix (ShipSense)</strong>:<br><br>
-        An <em>ML-powered delivery delay predictor</em> for e-commerce logistics.<br><br>
-        • Algorithm: <strong>Random Forest</strong><br>
-        • Accuracy: <strong>68%</strong> · ROC-AUC: <strong>0.74</strong><br>
-        • Interactive <strong>Streamlit + Plotly</strong> dashboard<br>
-        • Features: EDA, feature importance, predictions<br><br>
-        <a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank">Try the Live Demo ↗</a>`
+      keywords: ['smartlogix','smart logix','shipsense','ship sense','delivery prediction','delivery predictor','delivery delay','ecommerce delivery','e commerce delivery','logistics prediction','random forest','roc auc','model accuracy','streamlit dashboard','plotly dashboard','feature importance'],
+      response: () => `📦 <strong>SmartLogix (ShipSense)</strong> is a machine-learning project that predicts e-commerce delivery outcomes / delays.<br><br>• Model: <strong>Random Forest</strong><br>• Reported accuracy: <strong>~68%</strong><br>• Reported ROC-AUC: <strong>0.74</strong><br>• Tools: Python, Scikit-learn, Streamlit and Plotly<br>• Work includes data preprocessing, exploratory analysis, feature engineering, model evaluation and an interactive dashboard.<br><br><a href="https://shipsense-e-commerce-delivery-prediction-harshtank1912.streamlit.app/" target="_blank" rel="noopener noreferrer">Open Live Demo ↗</a><br><a href="https://github.com/HarshTank1912/ShipSense-E-Commerce-Delivery-Prediction" target="_blank" rel="noopener noreferrer">View GitHub Repository ↗</a>`
+    },
+    eraksha: {
+      keywords: ['eraksha','e raksha','surakshachain','suraksha chain','securecity','secure city','efir','e fir','electronic fir','fir system','blockchain fir','crime management','police records','fir integrity','tamper detection','ledger anchoring','hash verification','solidity contract','fir blockchain'],
+      response: () => `🛡️ <strong>eRaksha</strong> is Harsh's blockchain-based e-FIR management system concept, designed around a Surat City Police use case.<br><br>• Backend and database: <strong>PHP + MySQL</strong><br>• Blockchain: <strong>Solidity, Ethereum and Ganache</strong><br>• Smart-contract based record anchoring<br>• Cryptographic hashing and timestamping<br>• Hash verification to help detect record tampering<br>• Role-based workflows for Admin, Police and Users<br><br><strong>Note:</strong> This is an academic/project concept, not an officially deployed Surat City Police system.`
+    },
+    skills: {
+      keywords: ['skills','technical skills','skill set','tech stack','technology stack','technologies','programming languages','coding languages','languages does he know','what can he code','what does he know','what can he do','technical expertise','core competencies','frameworks','libraries','developer tools','software tools','frontend skills','backend skills','database skills','machine learning skills','data science skills','blockchain skills','proficient'],
+      response: () => `Harsh's skills span several areas:<br><br><strong>Programming:</strong> JavaScript, Python, PHP, SQL, C and C++<br><strong>Frontend & Mobile:</strong> React.js, React Native, Expo, Next.js, HTML5, CSS3, Tailwind CSS and Bootstrap<br><strong>Backend:</strong> Node.js, Express.js, REST APIs, authentication and CRUD development<br><strong>Databases:</strong> MongoDB, MySQL, Firebase and Firestore<br><strong>Data & ML:</strong> Pandas, NumPy, Scikit-learn, Statsmodels, Streamlit, Plotly and Random Forest<br><strong>Blockchain:</strong> Solidity, Ethereum, smart contracts, Ganache, Remix IDE, cryptographic hashing and ledger concepts<br><strong>Tools:</strong> Git, GitHub, VS Code and Postman`
+    },
+    programming: {
+      keywords: ['python','javascript','java language','php','sql','c programming','c++','cpp','programming language','coding language','which language','languages he uses'],
+      response: () => `Harsh has worked with <strong>JavaScript, Python, PHP, SQL, C and C++</strong>. His project work particularly uses JavaScript for web/mobile development and Python for data analysis and machine learning.`
+    },
+    frontend: {
+      keywords: ['frontend','front end','user interface','ui development','website design','web design','html','html5','css','css3','tailwind','bootstrap','react js','react.js','nextjs','next.js','responsive website','web page'],
+      response: () => `His frontend and mobile UI technologies include <strong>React.js, React Native, Expo, Next.js, HTML5, CSS3, Tailwind CSS and Bootstrap</strong>. He works on responsive interfaces and application screens.`
+    },
+    backend: {
+      keywords: ['backend','back end','server side','node','nodejs','node.js','express','expressjs','express.js','rest api','rest apis','api development','api integration','php backend','authentication','authorization','crud','server development'],
+      response: () => `His backend development stack includes <strong>Node.js, Express.js and PHP</strong>, along with REST API development/integration, authentication, authorization and CRUD operations.`
+    },
+    databases: {
+      keywords: ['database','databases','mongodb','mongo db','mysql','firebase','firestore','database management','database design','nosql','sql database','data storage'],
+      response: () => `Harsh has worked with <strong>MongoDB, MySQL, Firebase and Cloud Firestore</strong> for application data storage and database operations.`
+    },
+    dataml: {
+      keywords: ['machine learning','artificial intelligence','ai ml','ai/ml','data analysis','data analytics','data science','data visualization','predictive model','prediction model','pandas','numpy','scikit learn','sklearn','statsmodels','streamlit','plotly','random forest','sarimax','xgboost'],
+      response: () => `Harsh has project experience in <strong>Python-based data analysis and machine learning</strong>. Tools and libraries include Pandas, NumPy, Scikit-learn, Statsmodels, Streamlit and Plotly. He has worked with models such as Random Forest and time-series forecasting approaches.`
+    },
+    blockchain: {
+      keywords: ['blockchain','solidity','ethereum','smart contract','smart contracts','ganache','remix ide','distributed ledger','cryptographic hash','hashing','data integrity','web3','blockchain development'],
+      response: () => `Harsh has academic/project exposure to <strong>Blockchain</strong>, including Ethereum, Solidity smart contracts, Ganache, Remix IDE, cryptographic hashing, ledger anchoring and data-integrity verification. His eRaksha project demonstrates these concepts.`
+    },
+    education: {
+      keywords: ['education','educational background','academic background','study','studies','college','university','degree','btech','b.tech','computer engineering','engineering branch','mbit','cvm','cvmu','diploma','bmu','cgpa','gpa','semester','graduation','graduate','school','10th','tenth','qualification','academic qualification'],
+      response: () => `🎓 <strong>B.Tech — Computer Engineering</strong><br>Madhuben & Bhanubhai Patel Institute of Technology (MBIT), CVM University<br><em>2024–2027 · CGPA: 8.92</em><br><br>📘 <strong>Diploma — Computer Engineering</strong><br>Bhagwan Mahavir University (BMU), Gujarat<br><em>2021–2024 · CGPA: 8.67</em><br><br>He is pursuing his B.Tech degree.`
+    },
+    experience: {
+      keywords: ['experience','work experience','professional experience','internship','intern','employment','worked at','company worked','job role','responsibilities','backend developer intern','unity technology','edunet foundation','practical experience','industry experience'],
+      response: () => `💼 Harsh has internship experience in backend web development. He worked as a <strong>Backend Web Developer Intern at Unity Technology, Surat</strong> during May–June 2026, working with Node.js, Express.js, MongoDB, REST API integration and application/database modules.<br><br>His academic projects also provide practical experience across mobile development, machine learning and blockchain concepts.`
+    },
+    certifications: {
+      keywords: ['certification','certifications','certificate','certificates','credential','course','courses','training','sap','code unnati','innovation marathon','analytics cloud','designing stories','verify certificate','achievements','award','participation'],
+      response: () => `🏆 Harsh's training and participation highlights include:<br><br>• <strong>Designing Stories in SAP Analytics Cloud</strong> — Jan 2026. <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank" rel="noopener noreferrer">Verify ↗</a><br>• <strong>Code Unnati AI/ML Training Program</strong> — Apr 2026. <a href="https://drive.google.com/file/d/1luwwTlk4OHkAqPDyDczmGXvPCdC9UF5g/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Certificate ↗</a><br>• <strong>Innovation Marathon 4.0</strong> — 2025–2026. <a href="https://drive.google.com/file/d/1_Pz1su35SJBv8Qa9agM10M7_hB2PN5qQ/view?usp=drive_link" target="_blank" rel="noopener noreferrer">Certificate ↗</a>`
     },
 
-    securecity: {
-      keywords: ['securecity', 'secure city', 'crime', 'police', 'rbac', 'role based', 'php', 'mysql', 'web project'],
-      response: () => `🛡️ <strong>SecureCity</strong>:<br><br>
-        A web-based <em>crime management system</em> with Role-Based Access Control.<br><br>
-        • <strong>3 roles:</strong> Admin, Police Officer, Citizen<br>
-        • Secure login & session management<br>
-        • Full <strong>CRUD</strong> on crime & complaint records<br>
-        • Built with <strong>PHP + MySQL</strong> and structured relational DB schema`
+    resume: {
+      keywords: [
+        'resume', 'résumé', 'cv', 'curriculum vitae', 'download resume',
+        'download his resume', 'download harsh resume', 'download harshs resume',
+        'get resume', 'get his resume', 'view resume', 'see resume',
+        'show resume', 'show me resume', 'share resume', 'resume pdf',
+        'pdf resume', 'resume download', 'where can i download resume',
+        'where can i get his cv', 'can i download his cv', 'can i download resume',
+        'can i get his resume', 'can you share his resume', 'send me his resume',
+        'harsh resume', 'harsh tank resume', 'his cv', 'his resume'
+      ],
+      response: () => `📄 You can download <strong>Harsh Tank's latest resume</strong> here:<br><br><a class="resume-download-btn" href="./resume.pdf" download="Harsh_Tank_Resume.pdf">⬇️ Download Resume (PDF)</a><br><br>If the download does not start, <a href="./resume.pdf" target="_blank" rel="noopener noreferrer">open the resume PDF</a> in your browser.`
     },
-
+    contact: {
+      keywords: ['contact','contact details','contact information','reach','reach him','reach harsh','get in touch','connect with','talk to','message him','email','e-mail','mail address','phone number','linkedin','linked in','github','git hub','portfolio link','website link','social media','social profile','send message','contact him'],
+      response: () => `You can contact or connect with Harsh here:<br><br>📧 <strong>Email:</strong> <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a><br>💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank" rel="noopener noreferrer">LinkedIn Profile ↗</a><br>🐙 <strong>GitHub:</strong> <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener noreferrer">GitHub Profile ↗</a><br>🌐 <strong>Portfolio:</strong> <a href="https://harsh-tank-portfolio-five.vercel.app/" target="_blank" rel="noopener noreferrer">Personal Website ↗</a>`
+    },
+    github: {
+      keywords: ['github','git hub','github username','github account','github repository','github repositories','repo','repos','source code','sourcecode','open source'],
+      response: () => `🐙 Visit Harsh's GitHub profile: <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener noreferrer"><strong>github.com/HarshTank1912 ↗</strong></a><br><br>His repositories contain project code and development work.`
+    },
+    linkedin: {
+      keywords: ['linkedin','linked in','linkedin url','linkedin account','professional networking','connect on linkedin'],
+      response: () => `💼 Connect with Harsh on LinkedIn: <a href="https://www.linkedin.com/in/harsh-tank-663219354/" target="_blank" rel="noopener noreferrer"><strong>View LinkedIn Profile ↗</strong></a>`
+    },
+    location: {
+      keywords: ['location','where is he','where is harsh','where does he live','where is he based','which city','city based','surat','gujarat','india','remote work','work remotely','hybrid work','onsite','on site'],
+      response: () => `📍 Harsh is based in <strong>Surat, Gujarat, India</strong>. For work and collaboration preferences, please contact him directly at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a>.`
+    },
+    availability: {
+      keywords: ['available','availability','hire','hiring','looking for job','looking for work','job opportunity','internship opportunity','open to opportunity','freelance','freelancer','collaboration','collaborate','work with him','recruit','recruiter','employment','job role'],
+      response: () => `For internship, entry-level roles, freelance projects or collaboration, you can contact Harsh directly at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a>.<br><br>His main professional focus is Full Stack Development, with additional interests in mobile development, data/ML and blockchain. Please confirm his current availability directly.`
+    },
     thanks: {
-      keywords: ['thank', 'thanks', 'thank you', 'thx', 'ty', 'appreciate', 'great', 'awesome', 'nice', 'cool', 'perfect', 'helpful'],
-      response: () => `You're welcome! 😊 Feel free to ask me anything else about Harsh.<br><br>
-        Or reach out to him directly at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a> — he'd love to connect! 🚀`
+      keywords: ['thank you','thanks','thank','thx','ty','appreciate','that helps','very helpful'],
+      response: () => `You're welcome! 😊 Feel free to ask another question about Harsh's work, skills or projects.`
     },
-
     bye: {
-      keywords: ['bye', 'goodbye', 'see you', 'cya', 'later', 'take care', 'good night', 'good bye'],
-      response: () => `Goodbye! 👋 It was great chatting with you.<br><br>
-        If you'd like to collaborate with Harsh, don't hesitate to reach out. Have a great day! 🌟`
+      keywords: ['bye','goodbye','see you','cya','take care','good night','good bye'],
+      response: () => `Goodbye! 👋 Thanks for visiting Harsh's portfolio. Have a great day!`
     },
-
     fallback: {
-      response: () => `Hmm, I'm not sure about that one! 🤔<br><br>
-        I can help you with:<br>
-        • Harsh's <strong>projects</strong> & work<br>
-        • His <strong>skills</strong> & tech stack<br>
-        • <strong>Education</strong> & certifications<br>
-        • How to <strong>contact</strong> or hire him<br><br>
-        Try asking one of the above, or click a suggestion chip below! 👇`
+      response: () => `I couldn't confidently match that question to the information available in this portfolio. 🤔<br><br>I can answer questions about Harsh's profile and career, but I may not know unrelated or private information. Try asking about:<br>• <strong>About / Profile:</strong> “What does Harsh do?”<br>• <strong>Projects:</strong> “Tell me about eRaksha”<br>• <strong>Skills:</strong> “Does he know React or Python?”<br>• <strong>Education:</strong> “Where does he study?”<br>• <strong>Experience:</strong> “Where did he intern?”<br>• <strong>Certifications:</strong> “What certificates does he have?”<br>• <strong>Contact:</strong> “How can I reach him?”<br><br>For anything not listed, contact Harsh at <a href="mailto:harshtank19@gmail.com">harshtank19@gmail.com</a>.`
     }
   };
 
   /* ══════════════════════════════════════════════
-     INTENT MATCHING — Keyword scoring
+     INTENT MATCHING — normalize text and score specific phrases
   ══════════════════════════════════════════════ */
   function matchIntent(text) {
-    const lower = text.toLowerCase().trim();
+    const normalized = text.toLowerCase()
+      .replace(/[’']/g, '')
+      .replace(/[^a-z0-9+#.\s-]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
 
-    let bestIntent = null;
+    // Specific project and technology questions should win over broad categories.
+    const priority = [
+      'campusride','smartlogix','eraksha','databases','frontend','backend',
+      'programming','dataml','blockchain','experience','certifications',
+      'education','resume','github','linkedin','contact','availability','location',
+      'profile','about','skills','projects','help','greet','thanks','bye'
+    ];
+    let bestIntent = 'fallback';
     let bestScore = 0;
 
-    for (const [intent, data] of Object.entries(KB)) {
-      if (intent === 'fallback') continue;
-      if (!data.keywords) continue;
-
+    for (const intent of priority) {
+      const data = KB[intent];
+      if (!data || !data.keywords) continue;
       let score = 0;
-      for (const kw of data.keywords) {
-        if (lower.includes(kw)) {
-          // Longer matches score higher
-          score += kw.length;
+      for (const keyword of data.keywords) {
+        const kw = keyword.toLowerCase();
+        // Whole-phrase matching prevents short fragments matching inside unrelated words.
+        const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const pattern = new RegExp(`(^|\\s)${escaped.replace(/\s+/g, '\\s+')}(?=$|\\s)`, 'i');
+        if (pattern.test(normalized)) {
+          score += 10 + kw.length;
         }
       }
-
       if (score > bestScore) {
         bestScore = score;
         bestIntent = intent;
       }
     }
 
-    return bestScore > 0 ? bestIntent : 'fallback';
+    // Natural-language patterns that commonly express the same intent.
+    if (/\b(resume|résumé|cv|curriculum vitae)\b/.test(normalized)) return 'resume';
+    if (bestScore === 0) {
+      if (/\b(what|who|tell|describe|introduce|explain).{0,55}\b(harsh|he|him|his)\b/.test(normalized)) return 'about';
+      if (/\b(what|which|show|list|explain|describe).{0,45}\b(project|projects|built|developed|work|portfolio)\b/.test(normalized)) return 'projects';
+      if (/\b(what|which|show|list|explain).{0,45}\b(skill|skills|technology|technologies|language|stack|framework)\b/.test(normalized)) return 'skills';
+      if (/\b(where|which|what).{0,45}\b(college|university|study|studies|degree|qualification|course)\b/.test(normalized)) return 'education';
+      if (/\b(how|where|what).{0,45}\b(contact|email|reach|connect|message)\b/.test(normalized)) return 'contact';
+      if (/\b(currently|right now|at present|these days).{0,45}\b(study|doing|work|working|status|role|career)\b/.test(normalized)) return 'availability';
+      if (/\b(when|where|which|what).{0,45}\b(internship|intern|company|experience|job)\b/.test(normalized)) return 'experience';
+      if (/\b(why|how).{0,45}\b(project|built|developed|technology|tech stack)\b/.test(normalized)) return 'projects';
+    }
+
+    return bestIntent;
   }
 
   /* ══════════════════════════════════════════════
@@ -768,19 +807,30 @@
     const delay = 300 + Math.random() * 400;
     showTyping();
 
-    setTimeout(() => {
+    setTimeout(async () => {
       removeTyping();
-
       const intent = matchIntent(userText);
-      const response = KB[intent].response();
+      let response = KB[intent].response();
+
       const bubbleEl = appendBotMessage('');
       typewrite(bubbleEl, response);
+      lastSpokenText = response.replace(/<br\s*\/?\s*>/gi, '. ').replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+      if (voiceReplies) speakText(lastSpokenText);
       scrollToBottom();
-
       isBusy = false;
       sendBtn.disabled = false;
       inputEl.focus();
     }, delay);
+  }
+
+  function speakText(text) {
+    if (!('speechSynthesis' in window) || !text) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-IN';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
   }
 
   /* ══════════════════════════════════════════════
@@ -800,8 +850,8 @@
       welcomed = true;
       setTimeout(() => {
         const el = appendBotMessage('');
-        typewrite(el, `Hey! 👋 Welcome to Harsh's portfolio.<br><br>
-          I'm his AI assistant. Want to know about his <strong>projects</strong>, <strong>skills</strong>, or <strong>how to contact him</strong>? Just ask or click a chip below!`);
+        typewrite(el, `Hey! 👋 I'm <strong>Harsh's Jarvis</strong>.<br><br>
+          Your portfolio assistant. Type or speak your question — voice input is transcribed into chat, and replies appear here. Turn on the speaker only when you want audio. Want to know about his <strong>projects</strong>, <strong>skills</strong>, or <strong>how to contact him</strong>? Just ask or click a chip below!`);
         scrollToBottom();
       }, 200);
     }
@@ -827,6 +877,35 @@
 
   sendBtn.addEventListener('click', () => handleSend(inputEl.value));
 
+  micBtn?.addEventListener('click', () => {
+    if (!recognition) {
+      showVoiceNotice('Voice input is not supported in this browser. Please use Chrome or Edge, or type your question.');
+      return;
+    }
+    // Voice input and spoken output are independent controls.
+    // The microphone submits the recognized text to the same chat pipeline.
+    if (voiceRequestPending) {
+      try { recognition.stop(); } catch (_) {}
+      voiceRequestPending = false;
+      return;
+    }
+    try {
+      window.speechSynthesis?.cancel();
+      voiceRequestPending = true;
+      recognition.start();
+    } catch (_) {
+      voiceRequestPending = false;
+      showVoiceNotice('I could not start the microphone. Check browser permission and try again.');
+    }
+  });
+  speakBtn?.addEventListener('click', () => {
+    voiceReplies = !voiceReplies;
+    speakBtn.classList.toggle('is-active', voiceReplies);
+    speakBtn.setAttribute('aria-pressed', String(voiceReplies));
+    if (voiceReplies && lastSpokenText) speakText(lastSpokenText);
+    else window.speechSynthesis?.cancel();
+  });
+
   inputEl.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -851,3 +930,20 @@
 
 })();
 
+
+/* PORTFOLIO 3.0 — GLOBAL SEARCH, THEME + LOCAL CHAT HISTORY */
+(function portfolioV3Enhancements(){
+ const body=document.body,themeBtn=document.getElementById('themeToggle');
+ const savedTheme=localStorage.getItem('ht-portfolio-theme');if(savedTheme==='light')body.classList.add('light-theme');
+ function syncTheme(){if(themeBtn)themeBtn.innerHTML=body.classList.contains('light-theme')?'<i class="fa-solid fa-moon"></i>':'<i class="fa-solid fa-sun"></i>';}
+ syncTheme();themeBtn?.addEventListener('click',()=>{body.classList.toggle('light-theme');localStorage.setItem('ht-portfolio-theme',body.classList.contains('light-theme')?'light':'dark');syncTheme();});
+ const modal=document.getElementById('portfolioSearch'),field=document.getElementById('portfolioSearchInput'),openBtn=document.getElementById('globalSearchOpen'),links=[...document.querySelectorAll('#portfolioSearchResults a')];
+ function openSearch(){if(!modal)return;modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');setTimeout(()=>field?.focus(),40);}
+ function closeSearch(){modal?.classList.remove('is-open');modal?.setAttribute('aria-hidden','true');if(field)field.value='';links.forEach(a=>a.hidden=false);}
+ openBtn?.addEventListener('click',openSearch);modal?.addEventListener('click',e=>{if(e.target===modal)closeSearch();});
+ field?.addEventListener('input',()=>{const q=field.value.toLowerCase().trim();links.forEach(a=>a.hidden=!(`${a.textContent} ${a.dataset.search||''}`.toLowerCase().includes(q)));});
+ links.forEach(a=>a.addEventListener('click',closeSearch));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch();if(e.key==='/'&&!['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)){e.preventDefault();openSearch();}});
+ const root=document.getElementById('chatMessages');
+ if(root){const key='ht-jarvis-history-v1';try{const old=JSON.parse(localStorage.getItem(key)||'[]');old.slice(-12).forEach(m=>{const row=document.createElement('div');row.className=m.role==='user'?'chat-message user-message':'chat-message bot-message';row.innerHTML=`<div class="message-bubble">${m.html||''}</div>`;root.appendChild(row);});}catch(_){}const observer=new MutationObserver(()=>{const data=[...root.querySelectorAll('.chat-message')].slice(-30).map(row=>({role:row.classList.contains('user-message')?'user':'assistant',html:row.querySelector('.message-bubble')?.innerHTML||''}));try{localStorage.setItem(key,JSON.stringify(data));}catch(_){}});observer.observe(root,{childList:true,subtree:true,characterData:true});}
+})();
