@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Harsh Tank — Full Stack Developer | React Native, Node.js, MongoDB, Firebase | B.Tech Computer Engineering" />
-  <title>Harsh Tank — Portfolio</title>
+    content="Harsh Tank — Full Stack Developer | React Native, Node.js, Python, Data Analysis & Blockchain | B.Tech Computer Engineering" />
+  <title>Harsh Tank | Full Stack Developer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,451 +14,9 @@
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="style.css?v=8" />
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>" />
-
-  <style>
-    /* ════════════════════════════
-       HERO — Two-column layout
-    ════════════════════════════ */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 100px 0 60px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: var(--container);
-      margin: 0 auto;
-      padding: 0 clamp(20px, 5vw, 60px);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(40px, 6vw, 100px);
-      align-items: center;
-      width: 100%;
-    }
-
-    /* Left panel — name + animated label */
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(3.5rem, 9vw, 8.5rem);
-      line-height: 0.9;
-      letter-spacing: 0.01em;
-      margin: 0;
-    }
-
-    .name-static {
-      color: var(--text-primary);
-      display: block;
-    }
-
-    /* Multi-vibrant animated gradient surname */
-    .name-vibrant {
-      display: block;
-      background: linear-gradient(90deg,
-          #43e8b0 0%,
-          #a78bfa 20%,
-          #ff6b4a 40%,
-          #f5c842 60%,
-          #43e8b0 80%,
-          #61DAFB 100%);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: gradientShift 4s linear infinite;
-    }
-
-    @keyframes gradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      100% {
-        background-position: 300% 50%;
-      }
-    }
-
-    /* Animated role label pills on the left */
-    .hero-role-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .role-pill {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: 0.3rem 0.8rem;
-      border-radius: 100px;
-      border: 1px solid;
-      letter-spacing: 0.06em;
-      animation: pillFadeIn 0.6s var(--ease-out) both;
-    }
-
-    .role-pill:nth-child(1) {
-      color: #43e8b0;
-      border-color: rgba(67, 232, 176, 0.3);
-      background: rgba(67, 232, 176, 0.07);
-      --delay: 0.3s;
-    }
-
-    .role-pill:nth-child(2) {
-      color: #a78bfa;
-      border-color: rgba(167, 139, 250, 0.3);
-      background: rgba(167, 139, 250, 0.07);
-      --delay: 0.45s;
-    }
-
-    .role-pill:nth-child(3) {
-      color: #ff6b4a;
-      border-color: rgba(255, 107, 74, 0.3);
-      background: rgba(255, 107, 74, 0.07);
-      --delay: 0.6s;
-    }
-
-    .role-pill:nth-child(4) {
-      color: #f5c842;
-      border-color: rgba(245, 200, 66, 0.3);
-      background: rgba(245, 200, 66, 0.07);
-      --delay: 0.75s;
-    }
-
-    @keyframes pillFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    /* Bottom-left: stats */
-    .hero-stats {
-      display: flex;
-      align-items: center;
-      gap: 1.75rem;
-      margin-top: 0.5rem;
-    }
-
-    /* Right panel */
-    .hero-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 1.8vw, 1.25rem);
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin: 0;
-    }
-
-    .hero-tagline strong {
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-
-    .hero-tagline em {
-      font-style: normal;
-      font-family: var(--font-serif);
-      color: var(--mint);
-      font-size: 1.05em;
-    }
-
-    /* Inline highlights */
-    .hero-highlights {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .hero-highlight-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-    }
-
-    .hero-highlight-item i {
-      color: var(--mint);
-      width: 14px;
-      font-size: 0.7rem;
-    }
-
-    /* CTA + availability */
-    .hero-ctas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-
-    /* Mobile: stack to single column */
-    @media (max-width: 768px) {
-      .hero-content {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-
-      .hero-name {
-        font-size: clamp(3.5rem, 18vw, 6rem);
-      }
-
-      .hero-stats {
-        gap: 1.25rem;
-      }
-    }
-
-    /* ════════════════════════════
-       EDUCATION / INFO CARDS
-    ════════════════════════════ */
-    .about-info-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 1.5rem;
-      width: 100%;
-    }
-
-    .info-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      transition: border-color 0.25s, transform 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .info-card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--mint);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-
-    .info-card:hover {
-      border-color: rgba(67, 232, 176, 0.35);
-      transform: translateX(4px);
-    }
-
-    .info-card:hover::before {
-      opacity: 1;
-    }
-
-    .info-card-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 0.5rem;
-      background: rgba(67, 232, 176, 0.1);
-      border: 1px solid rgba(67, 232, 176, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.82rem;
-      color: var(--mint);
-      flex-shrink: 0;
-    }
-
-    .info-card-body {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .info-card-label {
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.12rem;
-    }
-
-    .info-card-title {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      color: var(--text-primary);
-      font-weight: 500;
-      line-height: 1.3;
-    }
-
-    .info-card-sub {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      margin-top: 0.1rem;
-    }
-
-    .info-card-badge {
-      font-family: var(--font-mono);
-      font-size: 0.62rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 100px;
-      background: rgba(67, 232, 176, 0.12);
-      color: var(--mint);
-      border: 1px solid rgba(67, 232, 176, 0.25);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* ════════════════════════════
-       CERT ITEMS
-    ════════════════════════════ */
-    .cert-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-top: 1rem;
-    }
-
-    .cert-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      color: var(--text-secondary);
-    }
-
-    .cert-item i {
-      color: var(--mint);
-      font-size: 0.68rem;
-    }
-
-    /* ════════════════════════════
-       TECH STACK — CATEGORY CARDS
-    ════════════════════════════ */
-    .stack-categories {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .stack-category {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .stack-category:hover {
-      border-color: rgba(67, 232, 176, 0.25);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .stack-category::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--cat-color, var(--mint));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s var(--ease-out);
-    }
-
-    .stack-category:hover::before {
-      transform: scaleX(1);
-    }
-
-    .stack-cat-header {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .stack-cat-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 0.625rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      background: rgba(67, 232, 176, 0.1);
-      border: 1px solid rgba(67, 232, 176, 0.2);
-      color: var(--cat-color, var(--mint));
-    }
-
-    .stack-cat-title {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      letter-spacing: 0.05em;
-      color: var(--text-primary);
-    }
-
-    .stack-cat-desc {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-    }
-
-    .stack-tech-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .tech-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      padding: 0.4rem 0.85rem;
-      border-radius: 0.5rem;
-      background: var(--ink);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
-      cursor: default;
-    }
-
-    .tech-badge i,
-    .tech-badge .badge-icon {
-      font-size: 0.9rem;
-    }
-
-    .tech-badge:hover {
-      color: var(--text-primary);
-      border-color: var(--cat-color, var(--mint));
-      background: rgba(67, 232, 176, 0.05);
-      transform: translateY(-2px);
-    }
-  </style>
 </head>
 
 <body>
@@ -473,11 +31,17 @@
       <a href="#home" class="nav-logo">HT<span class="logo-dot">◈</span></a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+        <li><a href="#journey" class="nav-link" data-section="journey">Journey</a></li>
         <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
         <li><a href="#stack" class="nav-link" data-section="stack">Skills</a></li>
         <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
       </ul>
-      <a href="#contact" class="nav-cta">Hire Me</a>
+
+      <div class="nav-tools">
+        <button class="nav-icon-btn" id="globalSearchOpen" type="button" aria-label="Search portfolio" title="Search (/)"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="nav-icon-btn" id="themeToggle" type="button" aria-label="Toggle color theme" title="Toggle theme"><i class="fa-solid fa-sun"></i></button>
+      </div>
+      <a href="#contact" class="nav-cta">Let's Connect <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
         <span></span><span></span><span></span>
       </button>
@@ -488,6 +52,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <ul>
       <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#journey" class="mobile-link">Journey</a></li>
       <li><a href="#projects" class="mobile-link">Projects</a></li>
       <li><a href="#stack" class="mobile-link">Skills</a></li>
       <li><a href="#contact" class="mobile-link">Contact</a></li>
@@ -534,8 +99,8 @@
         <!-- Stats -->
         <div class="hero-stats">
           <div class="stat">
-            <span class="stat-num" data-target="5">0</span><span class="stat-plus">+</span>
-            <span class="stat-label">Projects</span>
+            <span class="stat-num" data-target="3">0</span><span class="stat-plus">+</span>
+            <span class="stat-label">Featured Projects</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat">
@@ -544,8 +109,8 @@
           </div>
           <div class="stat-divider"></div>
           <div class="stat">
-            <span class="stat-num" data-target="5">0</span><span class="stat-plus">+</span>
-            <span class="stat-label">Tech Domains</span>
+            <span class="stat-num" data-target="3">0</span><span class="stat-plus">+</span>
+            <span class="stat-label">Focus Areas</span>
           </div>
         </div>
       </div>
@@ -553,12 +118,12 @@
       <!-- ── RIGHT: Tagline + Highlights + CTAs ── -->
       <div class="hero-right reveal-right" style="--delay:0.25s">
 
+        <div class="hero-kicker"><span class="kicker-line"></span> ENGINEERING USEFUL DIGITAL EXPERIENCES </div>
         <p class="hero-tagline">
-          <strong>Building scalable and impactful solutions for real-world challenges.</strong> — from campus mobility
-          to logistics
-          intelligence.<br /><br />
-          I design and engineer <em>cross-platform applications</em> that combine clean architecture, data-driven logic,
-          and experiences that create <em>meaningful impact</em>.
+          <strong>Full Stack Developer focused on building practical web and mobile applications.</strong>
+          I work across frontend interfaces, backend APIs, and databases using modern JavaScript technologies.
+          I also explore <em>Data Analysis and Machine Learning</em>, with working knowledge of
+          <em>blockchain concepts and smart contracts</em>.
         </p>
 
         <!--<div class="hero-highlights">
@@ -589,6 +154,13 @@
         </div>
       </div>
     </div>
+    <div class="hero-signal container reveal-up" aria-label="Portfolio highlights">
+      <div class="signal-label"><span class="signal-live"></span> DEVELOPER SNAPSHOT</div>
+      <div class="signal-item"><span class="signal-value">8.92</span><span class="signal-caption">Current CGPA</span></div>
+      <div class="signal-item"><span class="signal-value">Full Stack</span><span class="signal-caption">Core focus</span></div>
+      <div class="signal-item"><span class="signal-value">Web · Mobile · ML</span><span class="signal-caption">Build domains</span></div>
+      <a class="signal-link" href="#journey">Explore my journey <i class="fa-solid fa-arrow-down"></i></a>
+    </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════
@@ -613,7 +185,7 @@
                 <div class="info-card-body">
                   <div class="info-card-label">Current Education</div>
                   <div class="info-card-title">B.Tech — Computer Engineering</div>
-                  <div class="info-card-sub">MBIT, CVMU · 2024–2027
+                  <div class="info-card-sub">MBIT, CVMU · 2024–Current
                   </div>
                 </div>
                 <span class="info-card-badge">8.92 CGPA</span>
@@ -643,19 +215,22 @@
         <!-- Right: Text -->
         <div class="about-text reveal-right">
           <p class="about-body">
-            Hello I'm <em style="color:var(--mint)">Harsh Tank </em> , A final year <em style="color:#a78bfa">B.Tech
-              Computer Engineering</em>
-            student at <em style="color:#ff6b4a">Madhuben & Bhanubhai Patel Institute of Technology, CVMU</em> with
-            hands-on experience in full stack development and a strong foundation in building modern web
-            and cross-platform mobile applications. Proficient in technologies such as React, Node.js, Express, MongoDB,
-            and React Native, with a focus on developing scalable, efficient, and user-centric solutions.
+            I'm <em style="color:var(--mint)">Harsh Tank</em>, a Computer Engineering student pursuing a B.Tech
+            at <em style="color:#a78bfa">Madhuben &amp; Bhanubhai Patel Institute of Technology, CVM University</em>.
+            My primary focus is Full Stack Development, building web and cross-platform mobile applications with
+            React Native, JavaScript, Node.js, Express.js, PHP, and databases such as MongoDB and MySQL.
           </p>
 
           <p class="about-body">
-            Experienced in working on diverse projects including mobile applications, machine learning-based systems,
-            and secure web platforms, applying best practices in design, performance optimization, and clean
-            architecture. Passionate about problem-solving, continuous learning, and exploring new technologies to
-            create impactful digital products.
+            I have also explored Python-based Data Analysis and Machine Learning through predictive modelling and
+            interactive dashboards. My project work includes blockchain concepts such as Ethereum smart contracts,
+            cryptographic hashing, ledger anchoring, and record-integrity verification. I enjoy solving practical
+            problems, learning new tools, and developing reliable, user-focused applications.
+          </p>
+          <p class="about-body">
+            <strong>Internship:</strong> Backend Web Developer Intern at Unity Technology, Surat
+            <span style="color:var(--text-secondary)">(May–June 2026)</span>, working with Node.js, Express.js,
+            MongoDB, REST API integration, and academic management modules.
           </p>
 
           <!-- Certifications em style="color:#ff6b4a" color:#a78bfa  <em style="color:var(--mint)"-->
@@ -666,13 +241,21 @@
             <div class="cert-list">
               <div class="cert-item">
                 <i class="fa-solid fa-certificate"></i>
-                <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank">
+                <a href="https://badger.learning.sap.com/verify/ximuf-byfyb-nebyb-hetok-pigaf" target="_blank" rel="noopener noreferrer">
                   <span>Designing Stories
                     in SAP Analytics Cloud — <em style="color:var(--mint)">Jan 2026</em></span></a>
               </div>
               <div class="cert-item">
                 <i class="fa-solid fa-brain"></i>
-                <span>Code Unnati AI/ML Training — Supervised learning, data preprocessing &amp; model evaluation</span>
+                <a href="https://drive.google.com/file/d/1luwwTlk4OHkAqPDyDczmGXvPCdC9UF5g/view?usp=drive_link" target="_blank" rel="noopener">
+                  <span>Code Unnati AI/ML Training Program — AI/ML fundamentals</span>
+                </a>
+              </div>
+              <div class="cert-item">
+                <i class="fa-solid fa-lightbulb"></i>
+                <a href="https://drive.google.com/file/d/1_Pz1su35SJBv8Qa9agM10M7_hB2PN5qQ/view?usp=drive_link" target="_blank" rel="noopener">
+                  <span>Innovation Marathon 4.0 — Participant</span>
+                </a>
               </div>
             </div>
           </div>
@@ -696,10 +279,42 @@
   <!-- ═══════════════════════════════════════════════
        PROJECTS
   ═══════════════════════════════════════════════ -->
-  <section id="projects" class="section projects-section">
+  
+  <section id="journey" class="section journey-section">
     <div class="container">
       <div class="section-header">
         <span class="section-num">02</span>
+        <h2 class="section-title">The Journey<span class="accent-dot">.</span></h2>
+        <p class="section-subtitle">Education, hands-on experience and the milestones behind the work.</p>
+      </div>
+      <div class="journey-grid">
+        <article class="journey-card journey-feature reveal-up">
+          <div class="journey-card-top"><span class="journey-type"><i class="fa-solid fa-briefcase"></i> EXPERIENCE</span><span class="journey-period">May – Jun 2026</span></div>
+          <h3>Backend Web Developer Intern</h3><p class="journey-org">Unity Technology · Surat</p>
+          <p>Worked on backend development using Node.js, Express.js and MongoDB, contributing to attendance and result modules, REST API integration and database operations.</p>
+          <div class="journey-tags"><span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>REST APIs</span></div>
+        </article>
+        <article class="journey-card reveal-up">
+          <div class="journey-card-top"><span class="journey-type"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</span><span class="journey-period">2024 – Current</span></div>
+          <h3>B.Tech – Computer Engineering</h3><p class="journey-org">MBIT · CVM University</p>
+          <div class="journey-metric">8.92 <small>CGPA through Semester 6</small></div>
+          <p>Building a strong foundation in software engineering, computer systems and applied development.</p>
+        </article>
+        <article class="journey-card reveal-up">
+          <div class="journey-card-top"><span class="journey-type"><i class="fa-solid fa-award"></i> EDUCATION</span><span class="journey-period">2021 – 2024</span></div>
+          <h3>Diploma – Computer Engineering</h3><p class="journey-org">Bhagwan Mahavir Polytechnic College · BMU</p>
+          <div class="journey-metric">8.67 <small>CGPA</small></div>
+          <p>Developed practical foundations in programming, databases and application development.</p>
+        </article>
+      </div>
+      <div class="journey-note"><i class="fa-solid fa-circle-info"></i> Academic scores and dates reflect the information currently provided for this portfolio.</div>
+    </div>
+  </section>
+
+  <section id="projects" class="section projects-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">03</span>
         <h2 class="section-title">Projects<span class="accent-dot">.</span></h2>
         <p class="section-subtitle">Real-world problems, engineered solutions</p>
       </div>
@@ -711,7 +326,7 @@
           <div class="card-top-bar"></div>
           <div class="card-body">
             <div class="project-meta">
-              <span class="project-number">001</span>
+              
               <div class="project-links">
                 <a href="https://github.com/HarshTank1912/Campus-ride" target="_blank" rel="noopener"
                   aria-label="GitHub" class="icon-link"><i class="fa-brands fa-github"></i></a>
@@ -740,7 +355,7 @@
           <div class="card-top-bar"></div>
           <div class="card-body">
             <div class="project-meta">
-              <span class="project-number">002</span>
+            
               <div class="project-links">
                 <a href="https://github.com/HarshTank1912/ShipSense-E-Commerce-Delivery-Prediction" target="_blank"
                   rel="noopener" aria-label="GitHub" class="icon-link"><i class="fa-brands fa-github"></i></a>
@@ -768,24 +383,25 @@
           <div class="card-top-bar"></div>
           <div class="card-body">
             <div class="project-meta">
-              <span class="project-number">003</span>
+              
               <div class="project-links">
                 <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" aria-label="GitHub"
                   class="icon-link"><i class="fa-brands fa-github"></i></a>
-                <a href="#" target="_blank" rel="noopener" aria-label="Live Demo" class="icon-link live-link"><i
+                <a href="https://github.com/HarshTank1912" target="_blank" rel="noopener" aria-label="GitHub Profile" class="icon-link live-link"><i
                     class="fa-solid fa-arrow-up-right-from-square"></i></a>
               </div>
             </div>
-            <h3 class="project-title">SecureCity</h3>
-            <p class="project-desc">A web-based crime management system with role-based access control for Admin, Police
-              &amp; Citizens. Secure login, full CRUD on crime &amp; complaint records, and a structured relational
-              database schema.</p>
+            <h3 class="project-title">eRaksha</h3>
+            <p class="project-desc">A blockchain-based e-FIR management system concept for the Surat City Police use case.
+              Combines role-based access and crime-record management with Solidity smart contracts, Ganache-based
+              ledger anchoring, cryptographic hashing, timestamping, and hash verification to help detect record tampering.</p>
             <div class="project-tags">
               <span class="tag">PHP</span>
               <span class="tag">MySQL</span>
-              <span class="tag">RBAC</span>
-              <span class="tag">HTML5</span>
-              <span class="tag">CSS3</span>
+              <span class="tag">Solidity</span>
+              <span class="tag">Ethereum</span>
+              <span class="tag">Ganache</span>
+              <span class="tag">Remix IDE</span>
             </div>
           </div>
           <div class="card-hover-glow"></div>
@@ -801,7 +417,7 @@
   <section id="stack" class="section stack-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-num">03</span>
+        <span class="section-num">04</span>
         <h2 class="section-title">Skills & Tech Stack<span class="accent-dot">.</span></h2>
         <p class="section-subtitle">Organized by what I build and how I build it</p>
       </div>
@@ -813,7 +429,7 @@
           <div class="stack-cat-header">
             <div class="stack-cat-icon" style="--cat-color:#43e8b0"><i class="fa-solid fa-layer-group"></i></div>
             <div>
-              <div class="stack-cat-title">Full Stack</div>
+              <div class="stack-cat-title">Full Stack Development</div>
               <div class="stack-cat-desc">Web &amp; Mobile · Frontend to Backend</div>
             </div>
           </div>
@@ -837,8 +453,8 @@
           <div class="stack-cat-header">
             <div class="stack-cat-icon" style="--cat-color:#a78bfa"><i class="fa-solid fa-brain"></i></div>
             <div>
-              <div class="stack-cat-title">AI &amp; ML</div>
-              <div class="stack-cat-desc">Data · Machine Learning · Analytics</div>
+              <div class="stack-cat-title">Data Analysis &amp; Machine Learning</div>
+              <div class="stack-cat-desc">Python · Predictive Modelling · Analytics</div>
             </div>
           </div>
           <div class="stack-tech-grid" style="--cat-color:#a78bfa">
@@ -858,6 +474,27 @@
                 style="color:#a78bfa"></i> Data Analysis</span>
             <span class="tech-badge" style="--cat-color:#a78bfa"><i class="fa-solid fa-robot" style="color:#a78bfa"></i>
               Random Forest</span>
+          </div>
+        </div>
+
+        <!-- Blockchain -->
+        <div class="stack-category reveal-up" style="--cat-color:#f5c842;--delay:0.15s">
+          <div class="stack-cat-header">
+            <div class="stack-cat-icon" style="--cat-color:#f5c842"><i class="fa-solid fa-link"></i></div>
+            <div>
+              <div class="stack-cat-title">Blockchain Fundamentals</div>
+              <div class="stack-cat-desc">Smart Contracts · Ledger · Integrity</div>
+            </div>
+          </div>
+          <div class="stack-tech-grid" style="--cat-color:#f5c842">
+            <span class="tech-badge" style="--cat-color:#f5c842"><i class="fa-brands fa-ethereum"></i> Ethereum</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><span class="badge-icon">Sol</span> Solidity</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><i class="fa-solid fa-file-contract"></i> Smart Contracts</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><i class="fa-solid fa-cubes"></i> Blockchain Ledger</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><i class="fa-solid fa-fingerprint"></i> Cryptographic Hashing</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><i class="fa-solid fa-shield-halved"></i> Data Integrity</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><span class="badge-icon">G</span> Ganache</span>
+            <span class="tech-badge" style="--cat-color:#f5c842"><span class="badge-icon">R</span> Remix IDE</span>
           </div>
         </div>
 
@@ -899,7 +536,7 @@
   <section id="contact" class="section contact-section">
     <div class="container">
       <div class="section-header">
-        <span class="section-num">04</span>
+        <span class="section-num">05</span>
         <h2 class="section-title">Let's Talk<span class="accent-dot">.</span></h2>
         <p class="section-subtitle">Have a project, collaboration or opportunity? I'd love to hear from you.</p>
       </div>
@@ -988,25 +625,39 @@
        AI CHATBOT WIDGET
   ═══════════════════════════════════════════════ -->
 
+  <div class="portfolio-search-backdrop" id="portfolioSearch" aria-hidden="true">
+    <div class="portfolio-search-dialog" role="dialog" aria-modal="true" aria-label="Search portfolio">
+      <div class="portfolio-search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="portfolioSearchInput" type="search" placeholder="Search projects, skills, education…" autocomplete="off"><kbd>ESC</kbd></div>
+      <div class="portfolio-search-hint">QUICK NAVIGATION <span>Type to filter sections</span></div>
+      <div class="portfolio-search-results" id="portfolioSearchResults">
+        <a href="#about" data-search="about profile introduction"><span><i class="fa-regular fa-user"></i> About</span><kbd>01</kbd></a>
+        <a href="#journey" data-search="journey education experience internship"><span><i class="fa-solid fa-graduation-cap"></i> Education & Experience</span><kbd>02</kbd></a>
+        <a href="#projects" data-search="projects campus ride shipsense eraksha"><span><i class="fa-solid fa-code"></i> Projects</span><kbd>03</kbd></a>
+        <a href="#stack" data-search="skills technologies stack python react node"><span><i class="fa-solid fa-layer-group"></i> Skills & Tech Stack</span><kbd>04</kbd></a>
+        <a href="#contact" data-search="contact email linkedin github hire"><span><i class="fa-regular fa-paper-plane"></i> Contact</span><kbd>05</kbd></a>
+      </div><div class="portfolio-search-footer">Tip: press <kbd>/</kbd> to open search</div>
+    </div>
+  </div>
+
   <!-- Floating bubble trigger -->
-  <button class="chat-bubble" id="chatBubble" aria-label="Open AI Assistant">
+  <button class="chat-bubble" id="chatBubble" aria-label="Open Harsh's Jarvis">
     <span class="chat-bubble-pulse"></span>
-    <i class="fa-solid fa-comment-dots chat-bubble-icon" id="chatBubbleIcon"></i>
+    <i class="fa-solid fa-microphone chat-bubble-icon" id="chatBubbleIcon"></i>
   </button>
 
   <!-- Chat panel -->
-  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Portfolio Assistant" aria-hidden="true">
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Harsh's Jarvis portfolio assistant" aria-hidden="true">
 
     <!-- Header -->
     <div class="chat-header">
       <div class="chat-header-left">
         <div class="chat-avatar">
-          <span>HT</span>
+          <i class="fa-solid fa-microphone-lines" aria-hidden="true"></i>
           <span class="chat-avatar-dot"></span>
         </div>
         <div class="chat-header-info">
-          <strong>HT Assistant</strong>
-          <span>Ask me anything about Harsh</span>
+          <strong>Harsh's Jarvis</strong>
+          <span><span class="assistant-status-dot"></span> Portfolio intelligence · Online</span>
         </div>
       </div>
       <button class="chat-close" id="chatClose" aria-label="Close chat">
@@ -1025,12 +676,16 @@
       <button class="chat-chip" data-query="What are Harsh's skills?">⚡ Skills</button>
       <button class="chat-chip" data-query="Tell me about Harsh's education">🎓 Education</button>
       <button class="chat-chip" data-query="How can I contact Harsh?">📬 Contact</button>
+      <button class="chat-chip" data-query="Give me a recruiter summary of Harsh">✦ Recruiter view</button>
+      <button class="chat-chip" data-query="Explain the eRaksha project in detail">🛡️ Deep dive</button>
     </div>
 
     <!-- Input bar -->
     <div class="chat-input-bar">
+      <button class="chat-voice-btn" id="chatMic" type="button" aria-label="Start voice input" title="Voice input"><i class="fa-solid fa-microphone"></i></button>
       <input type="text" id="chatInput" class="chat-input" placeholder="Ask me anything…" autocomplete="off"
-        maxlength="200" />
+        maxlength="500" />
+      <button class="chat-voice-btn" id="chatSpeak" type="button" aria-label="Toggle spoken replies" title="Toggle spoken replies" aria-pressed="false"><i class="fa-solid fa-volume-high"></i></button>
       <button class="chat-send" id="chatSend" aria-label="Send message">
         <i class="fa-solid fa-paper-plane"></i>
       </button>
@@ -1039,8 +694,7 @@
 
   <!-- Backdrop (mobile) -->
   <div class="chat-overlay" id="chatOverlay"></div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 
 </html>
