@@ -823,31 +823,15 @@
     }, delay);
   }
 
-  function speakJarvis(text) {
-    if (!window.speechSynthesis) return;
-
+    function speakText(text) {
+    if (!('speechSynthesis' in window) || !text) return;
     window.speechSynthesis.cancel();
-
     const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-
-    const preferredVoice = voices.find(voice =>
-        /en-GB/i.test(voice.lang) &&
-        /male|daniel|george|ryan|arthur/i.test(voice.name)
-    );
-
-    const britishVoice = voices.find(voice =>
-        /en-GB/i.test(voice.lang)
-    );
-
-    utterance.voice = preferredVoice || britishVoice || null;
-    utterance.lang = "en-GB";
-    utterance.rate = 0.91;
-    utterance.pitch = 0.84;
-    utterance.volume = 1;
-
+    utterance.lang = 'en-IN';
+    utterance.rate = 1;
+    utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
-}
+  }
 
   /* ══════════════════════════════════════════════
      OPEN / CLOSE
