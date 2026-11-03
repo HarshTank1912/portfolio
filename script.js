@@ -823,16 +823,40 @@
     }, delay);
   }
 
-    function speakText(text) {
-    if (!('speechSynthesis' in window) || !text) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-IN';
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    window.speechSynthesis.speak(utterance);
-  }
 
+function speakText(text) {
+    if (!('speechSynthesis' in window) || !text) return;
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+
+    // Prefer a British English voice for a JARVIS-like tone
+    const preferredVoice = voices.find(voice =>
+        /en-GB/i.test(voice.lang) &&
+        /Daniel|Arthur|George|Ryan/i.test(voice.name)
+    );
+
+    const britishVoice = voices.find(voice =>
+        /en-GB/i.test(voice.lang)
+    );
+
+    utterance.voice = preferredVoice || britishVoice || null;
+
+    utterance.lang = 'en-GB';
+    utterance.rate = 0.90;
+    utterance.pitch = 0.82;
+    utterance.volume = 1;
+
+    window.speechSynthesis.speak(utterance);
+}
+
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+    };
+}
   /* ══════════════════════════════════════════════
      OPEN / CLOSE
   ══════════════════════════════════════════════ */
